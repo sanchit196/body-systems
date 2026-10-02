@@ -1,16 +1,137 @@
 /**
- * Body Systems | Minimalist Black Theme (1-Screen Viewport)
- * Systems drill-down engine, AI organ search bar, and 10s pencil sketch pin-pointer.
+ * Body Systems | Grade 7 Science Project
+ * Minimal 1-Screen Edition featuring NIDDK Media Asset #17996 Digestive Pencil Drawing,
+ * Interactive Hotspots, 10s Pencil Animation, and AI Organ Search.
  */
 
 // =============================================================================
-// 1. COMPACT SYSTEMS & ORGANS DATABASE
+// 1. COMPREHENSIVE ORGAN & SYSTEM DATABASE
+// Matches exact NIDDK #17996 labels + other major body systems
 // =============================================================================
 const SYSTEMS_DATA = {
+  digestive: {
+    id: "digestive",
+    title: "Digestive System",
+    badge: "SYSTEM 01",
+    stats: ["🥪 24-hr Journey", "📏 30 Feet of Tubing"],
+    organs: [
+      {
+        id: "stomach",
+        name: "The Stomach",
+        role: "Acid Liquefier & Churner",
+        emoji: "🥣",
+        func: "Churns food with hydrochloric acid (pH 1.5) to liquefy meals into creamy chyme.",
+        fact: "Produces a fresh protective mucus lining every 3 days to avoid digesting itself!",
+        subparts: "Cardia, Fundus, Body, Pyloric Sphincter",
+        pinId: "stomach",
+        sound: "beep"
+      },
+      {
+        id: "esophagus",
+        name: "Esophagus",
+        role: "Muscular Food Chute",
+        emoji: "🥛",
+        func: "Rhythmic muscular waves (peristalsis) squeeze swallowed food past the windpipe into your stomach.",
+        fact: "You can swallow food even when hanging upside down thanks to peristalsis!",
+        subparts: "Upper/Lower Esophageal Sphincters, Smooth Muscle",
+        pinId: "esophagus",
+        sound: "beep"
+      },
+      {
+        id: "liver",
+        name: "The Liver",
+        role: "Master Chemical Filter",
+        emoji: "🧫",
+        func: "Filters toxins from blood, makes digestive bile to break down fats, and stores glycogen fuel.",
+        fact: "The liver is your heaviest internal organ and can regenerate itself from a fraction of its tissue!",
+        subparts: "Left/Right Lobes, Hepatic Artery, Portal Vein",
+        pinId: "liver",
+        sound: "beep"
+      },
+      {
+        id: "gallbladder",
+        name: "Gallbladder",
+        role: "Bile Reservoir",
+        emoji: "🍐",
+        func: "Stores and concentrates bitter green bile produced by the liver until fatty foods enter digestion.",
+        fact: "Small pear-shaped sac tucked under your liver—it squeezes bile into the duodenum on demand!",
+        subparts: "Cystic Duct, Common Bile Duct",
+        pinId: "gallbladder",
+        sound: "beep"
+      },
+      {
+        id: "pancreas",
+        name: "Pancreas",
+        role: "Enzyme & Insulin Powerhouse",
+        emoji: "🧬",
+        func: "Releases powerful enzymes to digest carbs, proteins, and fats, and produces insulin to balance sugar.",
+        fact: "Secretes bicarbonate that neutralizes intense stomach acid so it doesn't burn your intestines!",
+        subparts: "Head, Body, Tail, Islets of Langerhans",
+        pinId: "pancreas",
+        sound: "beep"
+      },
+      {
+        id: "duodenum",
+        name: "Duodenum",
+        role: "First Intestinal Mixing Hub",
+        emoji: "🧪",
+        func: "The C-shaped first 10 inches of the small intestine where stomach chyme mixes with bile and enzymes.",
+        fact: "Named 'duodenum' from the Latin for 'twelve finger breadths' because of its exact length!",
+        subparts: "Superior, Descending, Horizontal, and Ascending segments",
+        pinId: "duodenum",
+        sound: "beep"
+      },
+      {
+        id: "small-intestine",
+        name: "Small Intestine",
+        role: "Master Nutrient Absorber",
+        emoji: "〰️",
+        func: "22-foot coiled tube where microscopic velvet villi absorb 90% of all vitamins and cellular fuel.",
+        fact: "Its inner surface area unfolded would cover an entire tennis court!",
+        subparts: "Jejunum, Ileum, Microscopic Villi & Microvilli",
+        pinId: "small-intestine",
+        sound: "beep"
+      },
+      {
+        id: "large-intestine",
+        name: "Large Intestine (Colon)",
+        role: "Water Recycler & Waste Hub",
+        emoji: "📦",
+        func: "Reabsorbs water, houses trillions of friendly gut microbes, and compacts solid waste.",
+        fact: "Your gut bacteria produce essential Vitamin K that helps your blood clot after cuts!",
+        subparts: "Cecum, Ascending/Transverse/Descending Colon, Sigmoid Colon",
+        pinId: "large-intestine",
+        sound: "beep"
+      },
+      {
+        id: "appendix",
+        name: "Appendix",
+        role: "Microbiome Safe-House",
+        emoji: "🪱",
+        func: "Small 4-inch pouch extending from the cecum; serves as a protective reservoir for beneficial gut bacteria.",
+        fact: "Once thought useless, scientists now know it reboots good gut bacteria after stomach bugs!",
+        subparts: "Mesoappendix, Lymphoid Follicles",
+        pinId: "appendix",
+        sound: "beep"
+      },
+      {
+        id: "rectum",
+        name: "Rectum & Anus",
+        role: "Waste Exit Gateway",
+        emoji: "🚪",
+        func: "The final 6-8 inches where stool is temporarily held before voluntary sphincter muscles release it.",
+        fact: "Equipped with specialized nerve sensors that signal to your brain when it's time to find a bathroom!",
+        subparts: "Rectal Ampulla, Internal & External Sphincters, Anal Canal",
+        pinId: "rectum",
+        sound: "beep"
+      }
+    ]
+  },
+
   circulatory: {
     id: "circulatory",
     title: "Circulatory System",
-    badge: "SYSTEM 01",
+    badge: "SYSTEM 02",
     stats: ["⚡ 100,000 beats/day", "🛣️ 60,000 miles vessels"],
     organs: [
       {
@@ -21,7 +142,6 @@ const SYSTEMS_DATA = {
         func: "Pumps oxygenated blood to your body cells and forces used blood into the lungs.",
         fact: "Generates its own electrical impulses using the SA node, beating independently!",
         subparts: "Right/Left Atria, Right/Left Ventricles, Aorta, Valves",
-        pin: { top: "30%", left: "51%", label: "Heart" },
         sound: "heart"
       },
       {
@@ -32,7 +152,6 @@ const SYSTEMS_DATA = {
         func: "Carry thick, oxygen-rich bright red blood away from the heart at high pressure.",
         fact: "The aorta is the thickest blood vessel—about the diameter of a garden hose!",
         subparts: "Aorta, Carotid Artery, Coronary Arteries",
-        pin: { top: "33%", left: "54%", label: "Arteries" },
         sound: "beep"
       },
       {
@@ -43,18 +162,6 @@ const SYSTEMS_DATA = {
         func: "Return deoxygenated blood back to the heart with one-way valves to prevent backflow.",
         fact: "Veins look blue through your skin because of how red light penetrates tissue!",
         subparts: "Superior Vena Cava, Inferior Vena Cava, Jugular",
-        pin: { top: "35%", left: "47%", label: "Veins" },
-        sound: "beep"
-      },
-      {
-        id: "capillaries",
-        name: "Capillaries",
-        role: "Microscopic Drop-off Points",
-        emoji: "🕸️",
-        func: "Microscopic single-cell thin tubes where oxygen and nutrients enter cells.",
-        fact: "Ten capillaries bundled together are thinner than a single strand of hair!",
-        subparts: "Arterioles, Capillary Beds, Venules",
-        pin: { top: "45%", left: "50%", label: "Capillaries" },
         sound: "beep"
       },
       {
@@ -65,7 +172,6 @@ const SYSTEMS_DATA = {
         func: "Carries oxygen (red cells), fights germs (white cells), and clots cuts (platelets).",
         fact: "Your body makes roughly 2 million fresh red blood cells every single second!",
         subparts: "Red Blood Cells, White Blood Cells, Platelets, Plasma",
-        pin: { top: "50%", left: "50%", label: "Blood" },
         sound: "beep"
       }
     ]
@@ -74,7 +180,7 @@ const SYSTEMS_DATA = {
   respiratory: {
     id: "respiratory",
     title: "Respiratory System",
-    badge: "SYSTEM 02",
+    badge: "SYSTEM 03",
     stats: ["💨 20,000 breaths/day", "🫧 600M Alveoli"],
     organs: [
       {
@@ -85,7 +191,6 @@ const SYSTEMS_DATA = {
         func: "Exchange inhaled oxygen with bloodstream waste carbon dioxide every breath.",
         fact: "Your left lung is 10% smaller than the right one to leave room for your heart!",
         subparts: "Right Lobe (3 sections), Left Lobe (2 sections), Pleura",
-        pin: { top: "27%", left: "44%", label: "Lungs" },
         sound: "breath"
       },
       {
@@ -96,7 +201,6 @@ const SYSTEMS_DATA = {
         func: "Directs air straight down the neck into the chest; protected by cartilage rings.",
         fact: "Lined with tiny hairs called cilia that sweep dust and germs upward!",
         subparts: "Cartilage C-Rings, Epiglottis, Larynx (Voice Box)",
-        pin: { top: "20%", left: "50%", label: "Trachea" },
         sound: "beep"
       },
       {
@@ -107,19 +211,7 @@ const SYSTEMS_DATA = {
         func: "600 million microscopic bubbles where oxygen diffuses directly into capillaries.",
         fact: "If all alveoli were flattened out, they would cover an entire tennis court!",
         subparts: "Alveolar Clusters, Surfactant, Capillary Mesh",
-        pin: { top: "29%", left: "55%", label: "Alveoli" },
         sound: "breath"
-      },
-      {
-        id: "diaphragm",
-        name: "The Diaphragm",
-        role: "Breathing Engine Muscle",
-        emoji: "🎛️",
-        func: "Pulls downward to create negative chest pressure so air rushes into your lungs.",
-        fact: "Hiccups happen when your diaphragm muscle involuntarily spasms!",
-        subparts: "Central Tendon, Sternal & Lumbar Attachments",
-        pin: { top: "36%", left: "50%", label: "Diaphragm" },
-        sound: "beep"
       }
     ]
   },
@@ -127,7 +219,7 @@ const SYSTEMS_DATA = {
   nervous: {
     id: "nervous",
     title: "Nervous System",
-    badge: "SYSTEM 03",
+    badge: "SYSTEM 04",
     stats: ["⚡ 268 MPH Signal Speed", "🧠 86 Billion Neurons"],
     organs: [
       {
@@ -138,7 +230,6 @@ const SYSTEMS_DATA = {
         func: "Processes sensory thoughts, controls movement, and regulates automatic breathing.",
         fact: "Generates enough electrical power (20 Watts) to illuminate a low-watt LED bulb!",
         subparts: "Cerebrum, Cerebellum, Brainstem, Hypothalamus",
-        pin: { top: "11%", left: "50%", label: "Brain" },
         sound: "beep"
       },
       {
@@ -149,71 +240,6 @@ const SYSTEMS_DATA = {
         func: "Transmits impulses between brain and peripheral nerves down your back.",
         fact: "Handles emergency reflexes (like pulling your hand off a hot stove) before the brain feels it!",
         subparts: "Cervical, Thoracic, Lumbar, Sacral Nerves",
-        pin: { top: "35%", left: "50%", label: "Spinal Cord" },
-        sound: "beep"
-      },
-      {
-        id: "neurons",
-        name: "Neurons & Synapses",
-        role: "Microscopic Electrical Wire",
-        emoji: "🔌",
-        func: "Send electrochemical signals across synaptic gaps in fractions of a millisecond.",
-        fact: "Information travels along myelin-insulated axons at over 260 miles per hour!",
-        subparts: "Dendrites, Soma (Cell Body), Axon, Synapse",
-        pin: { top: "14%", left: "52%", label: "Neurons" },
-        sound: "beep"
-      }
-    ]
-  },
-
-  digestive: {
-    id: "digestive",
-    title: "Digestive System",
-    badge: "SYSTEM 04",
-    stats: ["🥪 24-hr Journey", "📏 30 Feet of Tubing"],
-    organs: [
-      {
-        id: "stomach",
-        name: "The Stomach",
-        role: "Acid Liquefier",
-        emoji: "🥣",
-        func: "Churns food with hydrochloric acid (pH 1.5) to liquefy meals into creamy chyme.",
-        fact: "Produces a fresh protective mucus lining every 3 days to avoid digesting itself!",
-        subparts: "Cardia, Fundus, Body, Pyloric Sphincter",
-        pin: { top: "42%", left: "53%", label: "Stomach" },
-        sound: "beep"
-      },
-      {
-        id: "small-intestine",
-        name: "Small Intestine",
-        role: "Master Nutrient Absorber",
-        emoji: "〰️",
-        func: "22-foot coiled tube where microscopic villi absorb 90% of all vitamins and fuel.",
-        fact: "Lined with millions of velvety villi that give it a huge surface area!",
-        subparts: "Duodenum, Jejunum, Ileum, Villi",
-        pin: { top: "50%", left: "50%", label: "Small Intestine" },
-        sound: "beep"
-      },
-      {
-        id: "liver",
-        name: "The Liver",
-        role: "Chemical Detox Plant",
-        emoji: "🧫",
-        func: "Filters toxins from blood, makes digestive bile, and stores glycogen fuel.",
-        fact: "The liver is your largest internal organ and can regenerate itself from a small piece!",
-        subparts: "Left/Right Lobes, Hepatic Artery, Gallbladder",
-        pin: { top: "39%", left: "44%", label: "Liver" },
-        sound: "beep"
-      },
-      {
-        id: "large-intestine",
-        name: "Large Intestine (Colon)",
-        role: "Water Recycler & Waste Collector",
-        emoji: "📦",
-        func: "Reabsorbs water, houses beneficial gut bacteria, and forms compact waste.",
-        fact: "Home to trillions of friendly microbes that produce essential Vitamin K!",
-        subparts: "Cecum, Ascending/Descending Colon, Rectum",
-        pin: { top: "54%", left: "50%", label: "Large Intestine" },
         sound: "beep"
       }
     ]
@@ -233,7 +259,6 @@ const SYSTEMS_DATA = {
         func: "Supports body weight during running and jumping; produces marrow blood cells.",
         fact: "Stronger than solid concrete and reinforced steel ounce-for-ounce!",
         subparts: "Femoral Head, Shaft, Condyles",
-        pin: { top: "72%", left: "44%", label: "Femur Bone" },
         sound: "beep"
       },
       {
@@ -244,29 +269,6 @@ const SYSTEMS_DATA = {
         func: "Encases and shields the delicate brain tissue and supports facial sensory organs.",
         fact: "Babies are born with 270 soft bones that fuse into the 206 adult bones!",
         subparts: "Cranial Bones, Mandible (Jaw), Sutures",
-        pin: { top: "10%", left: "50%", label: "Skull" },
-        sound: "beep"
-      },
-      {
-        id: "ribcage",
-        name: "Rib Cage",
-        role: "Protective Chest Armor",
-        emoji: "🦺",
-        func: "12 pairs of curved bones shielding your heart and lungs that expand as you breathe.",
-        fact: "Connected by flexible cartilage so your chest can expand with every breath!",
-        subparts: "Sternum, True Ribs, Floating Ribs",
-        pin: { top: "28%", left: "50%", label: "Rib Cage" },
-        sound: "beep"
-      },
-      {
-        id: "biceps",
-        name: "Skeletal Muscles",
-        role: "Opposing Pull Motors",
-        emoji: "💪",
-        func: "Muscles pull bones like levers. When biceps contract, triceps relax!",
-        fact: "You use over 200 muscles just to take one single step forward!",
-        subparts: "Muscle Fibers, Tendons, Actin & Myosin Filaments",
-        pin: { top: "33%", left: "68%", label: "Bicep Muscle" },
         sound: "beep"
       }
     ]
@@ -286,7 +288,6 @@ const SYSTEMS_DATA = {
         func: "Filter waste urea and extra fluids from blood roughly 40 times every single day.",
         fact: "You only need about 75% of one single kidney to live a full, normal life!",
         subparts: "Renal Cortex, Nephrons, Renal Pelvis",
-        pin: { top: "45%", left: "44%", label: "Kidneys" },
         sound: "beep"
       },
       {
@@ -297,7 +298,6 @@ const SYSTEMS_DATA = {
         func: "Hollow elastic pouch that holds liquid waste funneled down by the ureters.",
         fact: "Can stretch to hold about 2 cups (500ml) of fluid safely!",
         subparts: "Detrusor Muscle, Ureters, Urethra",
-        pin: { top: "58%", left: "50%", label: "Bladder" },
         sound: "beep"
       }
     ]
@@ -363,8 +363,8 @@ const audio = new MinimalAudio();
 // =============================================================================
 // 3. MAIN DASHBOARD CONTROLLER
 // =============================================================================
-let activeSysKey = "circulatory";
-let activeOrganId = "heart";
+let activeSysKey = "digestive";
+let activeOrganId = "stomach";
 
 function selectSystem(sysKey, targetOrganId = null) {
   const sysData = SYSTEMS_DATA[sysKey];
@@ -420,19 +420,12 @@ function selectOrgan(organ) {
   document.getElementById("detail-fact").textContent = organ.fact;
   document.getElementById("detail-subparts").textContent = organ.subparts;
 
-  // Move Pencil Sketch Pointer Pin
-  const pointer = document.getElementById("sketch-pointer");
-  const pointerText = document.getElementById("pointer-text");
-  if (pointer && organ.pin) {
-    pointer.style.top = organ.pin.top;
-    pointer.style.left = organ.pin.left;
-    pointerText.textContent = organ.pin.label;
-  }
-
-  // Highlight corresponding path in pencil sketch if present
-  document.querySelectorAll(".organ-path").forEach(p => p.classList.remove("active"));
-  const sketchNode = document.querySelector(`.organ-path[data-part="${organ.id}"]`);
-  if (sketchNode) sketchNode.classList.add("active");
+  // Highlight Hotspot Pin on the sketch
+  document.querySelectorAll(".hotspot-pin").forEach(pin => {
+    const pinPart = pin.getAttribute("data-part");
+    const isMatch = pinPart === organ.id || (organ.pinId && pinPart === organ.pinId);
+    pin.classList.toggle("active", isMatch);
+  });
 
   // Play audio cue
   if (organ.sound === "heart") {
@@ -443,14 +436,13 @@ function selectOrgan(organ) {
 }
 
 // =============================================================================
-// 4. AI SEARCH BOX (Instant Intelligent Organ Lookup)
+// 4. AI SEARCH BOX
 // =============================================================================
 function initAiSearch() {
   const searchInput = document.getElementById("ai-search-input");
   const dropdown = document.getElementById("search-dropdown");
   const clearBtn = document.getElementById("clear-search-btn");
 
-  // Build searchable index of all organs & aliases
   const searchIndex = [];
   Object.keys(SYSTEMS_DATA).forEach(sysKey => {
     const sys = SYSTEMS_DATA[sysKey];
@@ -474,12 +466,10 @@ function initAiSearch() {
     }
 
     clearBtn.classList.remove("hidden");
-
-    // Match keywords
     const matches = searchIndex.filter(item => item.keywords.includes(q)).slice(0, 5);
 
     if (matches.length === 0) {
-      dropdown.innerHTML = `<div class="search-item"><div class="search-item-top">No exact match for "${query}"</div><div class="search-item-desc">Try typing Heart, Brain, Lungs, Femur, Alveoli, or Stomach!</div></div>`;
+      dropdown.innerHTML = `<div class="search-item"><div class="search-item-top">No exact match for "${query}"</div><div class="search-item-desc">Try searching Stomach, Liver, Esophagus, Pancreas, or Heart!</div></div>`;
       dropdown.classList.remove("hidden");
       return;
     }
@@ -523,21 +513,20 @@ function initAiSearch() {
 }
 
 // =============================================================================
-// 5. PENCIL SKETCH ANIMATION CONTROLLER (10-Second Loop)
+// 5. PENCIL SKETCH CONTROLLER (10-Second Loop & Hotspots)
 // =============================================================================
 function initPencilSketch() {
   const restartBtn = document.getElementById("restart-sketch-btn");
-  const svg = document.getElementById("pencil-svg");
+  const invertBtn = document.getElementById("invert-view-btn");
+  const stage = document.getElementById("sketch-stage");
+  const curtain = document.getElementById("drawing-curtain");
   const pencilTip = document.getElementById("pencil-tip");
 
+  // Replay 10s sketch animation
   function replaySketch() {
-    // Reset animation by triggering reflow
-    const paths = svg.querySelectorAll(".sketch-path");
-    paths.forEach(p => {
-      p.style.animation = "none";
-      void p.offsetWidth;
-      p.style.animation = "";
-    });
+    curtain.style.animation = "none";
+    void curtain.offsetWidth;
+    curtain.style.animation = "";
 
     if (pencilTip) {
       pencilTip.style.animation = "none";
@@ -550,13 +539,22 @@ function initPencilSketch() {
 
   if (restartBtn) restartBtn.addEventListener("click", replaySketch);
 
-  // Click on SVG organs directly
-  document.querySelectorAll(".organ-path").forEach(node => {
-    node.addEventListener("click", () => {
-      const part = node.getAttribute("data-part");
-      // Find which system holds this organ
+  // Toggle Paper vs Chalkboard
+  if (invertBtn) {
+    invertBtn.addEventListener("click", () => {
+      const isChalkboard = stage.classList.toggle("chalkboard-mode");
+      invertBtn.textContent = isChalkboard ? "☀️ Chalkboard" : "🌓 Paper Mode";
+      audio.playBeep(600, 0.04);
+    });
+  }
+
+  // Hotspot Pin Clicks on the Sketch Image
+  document.querySelectorAll(".hotspot-pin").forEach(pin => {
+    pin.addEventListener("click", () => {
+      const partId = pin.getAttribute("data-part");
+      // Find organ in digestive system or any other system
       for (const sKey of Object.keys(SYSTEMS_DATA)) {
-        const found = SYSTEMS_DATA[sKey].organs.find(o => o.id === part);
+        const found = SYSTEMS_DATA[sKey].organs.find(o => o.id === partId || o.pinId === partId);
         if (found) {
           selectSystem(sKey, found.id);
           break;
@@ -598,7 +596,6 @@ function initModal() {
     });
   }
 
-  // Audio Toggle Button
   const audioToggle = document.getElementById("audio-toggle-btn");
   if (audioToggle) {
     audioToggle.addEventListener("click", () => {
@@ -608,7 +605,6 @@ function initModal() {
     });
   }
 
-  // Sound button on fact card
   const playPulseBtn = document.getElementById("play-pulse-btn");
   if (playPulseBtn) {
     playPulseBtn.addEventListener("click", () => {
@@ -622,7 +618,6 @@ function initModal() {
 // DOM READY
 // =============================================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize systems bar listeners
   document.querySelectorAll(".sys-chip").forEach(chip => {
     chip.addEventListener("click", () => {
       selectSystem(chip.getAttribute("data-sys"));
@@ -633,8 +628,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initPencilSketch();
   initModal();
 
-  // Load default system
-  selectSystem("circulatory", "heart");
+  // Load Digestive system as default (matches NIDDK sketch #17996)
+  selectSystem("digestive", "stomach");
 
-  console.log("Body Systems Minimal 1-Screen loaded cleanly.");
+  console.log("Body Systems Grade 7 Science Project initialized with NIDDK sketch.");
 });

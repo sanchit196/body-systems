@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Body Systems | Minimalist Student Science Project</title>
-  <meta name="description" content="A minimal, 1-screen interactive body systems project with pencil sketch animation, system drill-downs, and instant organ search.">
+  <title>Body Systems | Grade 7 Science Project</title>
+  <meta name="description" content="Body Systems - Grade 7 Science Project. Minimal 1-screen interactive anatomy sketch with organ drill-down and AI search.">
   
   <!-- Clean Inter & Space Grotesk Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,8 +24,8 @@
       <div class="nav-left">
         <span class="pencil-icon">✏️</span>
         <div class="logo-group">
-          <span class="logo-title">BODY SYSTEMS</span>
-          <span class="logo-badge">Grade 7/8 Science Project</span>
+          <span class="logo-title">Body Systems</span>
+          <span class="logo-badge">Grade 7 Science Project</span>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
       <div class="search-container">
         <div class="search-input-wrap">
           <span class="search-icon">✨</span>
-          <input type="text" id="ai-search-input" placeholder="Ask or search any body part (e.g. Heart, Femur, Alveoli)..." autocomplete="off">
+          <input type="text" id="ai-search-input" placeholder="Ask or search any body part (e.g. Stomach, Liver, Esophagus, Heart)..." autocomplete="off">
           <button id="clear-search-btn" class="clear-btn hidden">&times;</button>
         </div>
         <!-- SEARCH RESULTS DROPDOWN -->
@@ -49,69 +49,52 @@
     <!-- MAIN DASHBOARD (1 SCREEN, DUAL PANEL) -->
     <main class="main-dashboard">
       
-      <!-- LEFT PANEL: 10-SECOND PENCIL SKETCH ANIMATION -->
+      <!-- LEFT PANEL: 10-SECOND PENCIL SKETCH ANIMATION (NIDDK ANATOMICAL SKETCH) -->
       <section class="sketch-panel">
         <div class="panel-header">
           <div class="sketch-status">
             <span class="rec-dot"></span>
-            <span id="sketch-timer-label">PENCIL SKETCH • 10s LOOP</span>
+            <span id="sketch-timer-label">PENCIL SKETCH • 10s DRAWING</span>
           </div>
-          <button id="restart-sketch-btn" class="btn-text-action" title="Replay Pencil Sketch">🔄 Redraw</button>
+          <div class="sketch-actions">
+            <button id="invert-view-btn" class="btn-text-action" title="Toggle Paper / Chalkboard">🌓 Paper Mode</button>
+            <button id="restart-sketch-btn" class="btn-text-action" title="Replay 10s Pencil Sketch">🔄 Redraw (10s)</button>
+          </div>
         </div>
 
-        <div class="sketch-stage" id="sketch-stage">
+        <div class="sketch-stage paper-mode" id="sketch-stage">
           <!-- Animated Moving Pencil Hand -->
           <div class="animated-pencil" id="pencil-tip">
             <span class="pencil-lead">✏️</span>
           </div>
 
-          <!-- THE PENCIL SKETCH SVG (Chalk / Pencil on Black Board) -->
-          <svg viewBox="0 0 340 500" class="pencil-body-svg" id="pencil-svg" xmlns="http://www.w3.org/2000/svg">
-            <filter id="pencilGlow">
-              <feGaussianBlur stdDeviation="0.8" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-
-            <!-- Anatomical Outline (Animated Pencil Path) -->
-            <path class="sketch-path body-contour" d="M170,25 C185,25 195,38 195,58 C195,78 186,88 182,95 C196,102 216,112 228,126 C240,140 252,175 258,215 C262,245 260,265 254,275 C248,278 242,272 238,255 C232,230 230,190 224,175 C222,210 218,255 216,305 C214,350 212,390 208,440 C206,455 196,455 192,440 C186,395 180,340 176,305 C173,285 167,285 164,305 C160,340 154,395 148,440 C144,455 134,455 132,440 C128,390 126,350 124,305 C122,255 118,210 116,175 C110,190 108,230 102,255 C98,272 92,278 86,275 C80,265 78,245 82,215 C88,175 100,140 112,126 C124,112 144,102 158,95 C154,88 145,78 145,58 C145,38 155,25 170,25 Z" />
-
-            <!-- Spine & Rib Cage Sketches -->
-            <path class="sketch-path spine-sketch" d="M170,95 L170,270" />
-            <path class="sketch-path ribs-sketch" d="M150,130 Q170,125 190,130 M145,150 Q170,145 195,150 M145,170 Q170,165 195,170 M150,190 Q170,185 190,190" />
-
-            <!-- Brain Sketch -->
-            <path class="sketch-path organ-path" id="sketch-brain" data-part="brain" d="M155,56 C150,38 185,38 185,56 C190,70 150,70 155,56 Z" />
+          <!-- THE AUTHENTIC PENCIL DRAWING (NIDDK MEDIA ASSET 17996) -->
+          <div class="sketch-wrapper" id="sketch-wrapper">
+            <img src="digestive_sketch.jpg" alt="Digestive system within an outline of the top half of a human body - NIDDK Pencil Sketch" class="sketch-img" id="sketch-img">
             
-            <!-- Lungs Sketch -->
-            <path class="sketch-path organ-path" id="sketch-lungs" data-part="lungs" d="M148,125 C138,130 134,150 137,170 C140,180 152,180 156,170 C159,160 159,135 148,125 Z M192,125 C202,130 206,150 203,170 C200,180 188,180 184,170 C181,160 181,135 192,125 Z" />
+            <!-- Dynamic 10-Second Reveal Mask -->
+            <div class="drawing-curtain" id="drawing-curtain"></div>
 
-            <!-- Heart Sketch -->
-            <path class="sketch-path organ-path" id="sketch-heart" data-part="heart" d="M172,145 C165,135 152,140 155,155 C160,175 173,185 173,185 C173,185 186,175 191,155 C194,140 181,135 172,145 Z" />
-
-            <!-- Stomach Sketch -->
-            <path class="sketch-path organ-path" id="sketch-stomach" data-part="stomach" d="M162,200 C175,195 188,205 184,222 C180,235 160,235 156,220 Z" />
-
-            <!-- Intestines Sketch -->
-            <path class="sketch-path organ-path" id="sketch-intestines" data-part="small-intestine" d="M152,240 Q170,235 188,240 Q170,250 152,250 Q170,260 188,260" />
-
-            <!-- Femur Bones -->
-            <line class="sketch-path" x1="148" y1="310" x2="142" y2="400" />
-            <line class="sketch-path" x1="192" y1="310" x2="198" y2="400" />
-          </svg>
-
-          <!-- Interactive Highlight Overlay Pin -->
-          <div class="sketch-pointer" id="sketch-pointer">
-            <span class="pointer-dot"></span>
-            <span class="pointer-text" id="pointer-text">Heart</span>
+            <!-- INTERACTIVE HOTSPOTS MATCHING LABELS -->
+            <div class="interactive-overlay">
+              <button class="hotspot-pin" style="top: 17%; left: 70%;" data-part="esophagus" title="Esophagus">Esophagus</button>
+              <button class="hotspot-pin" style="top: 34%; left: 68%;" data-part="stomach" title="Stomach">Stomach</button>
+              <button class="hotspot-pin" style="top: 35%; left: 45%;" data-part="liver" title="Liver">Liver</button>
+              <button class="hotspot-pin" style="top: 37%; left: 22%;" data-part="gallbladder" title="Gallbladder">Gallbladder</button>
+              <button class="hotspot-pin" style="top: 38%; left: 81%;" data-part="pancreas" title="Pancreas">Pancreas</button>
+              <button class="hotspot-pin" style="top: 45%; left: 24%;" data-part="duodenum" title="Duodenum">Duodenum</button>
+              <button class="hotspot-pin" style="top: 67%; left: 22%;" data-part="small-intestine" title="Small intestine">Small intestine</button>
+              <button class="hotspot-pin" style="top: 59%; left: 80%;" data-part="large-intestine" title="Large intestine">Large intestine</button>
+              <button class="hotspot-pin" style="top: 73%; left: 25%;" data-part="appendix" title="Appendix">Appendix</button>
+              <button class="hotspot-pin" style="top: 76%; left: 72%;" data-part="rectum" title="Rectum">Rectum</button>
+              <button class="hotspot-pin" style="top: 78%; left: 41%;" data-part="anus" title="Anus">Anus</button>
+            </div>
           </div>
         </div>
 
         <div class="sketch-caption">
-          <span>✍️ Hand-drawn Anatomical Sketch</span>
-          <span class="caption-hint">Tap any organ on right to pinpoint</span>
+          <span>✍️ NIDDK Medical Library Drawing (Media Asset #17996)</span>
+          <span class="caption-hint">Click any label to inspect</span>
         </div>
       </section>
 
@@ -120,10 +103,10 @@
         
         <!-- SYSTEM SELECTOR CHIPS -->
         <div class="systems-bar">
-          <button class="sys-chip active" data-sys="circulatory">🫀 Circulatory</button>
+          <button class="sys-chip active" data-sys="digestive">🥪 Digestive</button>
+          <button class="sys-chip" data-sys="circulatory">🫀 Circulatory</button>
           <button class="sys-chip" data-sys="respiratory">🫁 Respiratory</button>
           <button class="sys-chip" data-sys="nervous">🧠 Nervous</button>
-          <button class="sys-chip" data-sys="digestive">🥪 Digestive</button>
           <button class="sys-chip" data-sys="skeletal">🦴 Skeletal</button>
           <button class="sys-chip" data-sys="excretory">🩸 Excretory</button>
         </div>
@@ -135,11 +118,11 @@
           <div class="system-summary">
             <div class="summary-left">
               <span class="sys-badge" id="sys-badge">SYSTEM 01</span>
-              <h2 class="sys-title" id="sys-title">Circulatory System</h2>
+              <h2 class="sys-title" id="sys-title">Digestive System</h2>
             </div>
             <div class="summary-stats">
-              <span class="sys-stat-chip" id="sys-stat-1">⚡ 100,000 beats/day</span>
-              <span class="sys-stat-chip" id="sys-stat-2">🛣️ 60,000 miles vessels</span>
+              <span class="sys-stat-chip" id="sys-stat-1">🥪 24-hr Journey</span>
+              <span class="sys-stat-chip" id="sys-stat-2">📏 30 Feet of Tubing</span>
             </div>
           </div>
 
@@ -151,27 +134,27 @@
           <!-- SHORT FACT & FUNCTION DISPLAY CARD -->
           <div class="fact-card" id="fact-card">
             <div class="fact-header">
-              <span class="fact-organ-emoji" id="detail-emoji">🫀</span>
+              <span class="fact-organ-emoji" id="detail-emoji">🥣</span>
               <div>
-                <h3 class="fact-organ-name" id="detail-name">The Heart</h3>
-                <span class="fact-organ-role" id="detail-role">Primary Muscular Pump</span>
+                <h3 class="fact-organ-name" id="detail-name">The Stomach</h3>
+                <span class="fact-organ-role" id="detail-role">Acid Liquefier & Churner</span>
               </div>
             </div>
 
             <div class="fact-grid">
               <div class="fact-cell">
                 <span class="cell-label">Primary Function:</span>
-                <p id="detail-function">Pumps oxygenated blood to all cells and returns deoxygenated blood to lungs.</p>
+                <p id="detail-function">Churns food with hydrochloric acid (pH 1.5) to liquefy meals into creamy chyme.</p>
               </div>
               <div class="fact-cell">
                 <span class="cell-label">Quick Science Fact:</span>
-                <p id="detail-fact">Has its own electrical pacemaker (SA node) so it can beat independently!</p>
+                <p id="detail-fact">Produces a fresh protective mucus lining every 3 days to avoid digesting itself!</p>
               </div>
             </div>
 
             <!-- MINI ACTION ROW -->
             <div class="fact-footer">
-              <span class="sub-parts-label">Sub-parts: <strong id="detail-subparts">4 Chambers (Atria & Ventricles), Aorta, Valves</strong></span>
+              <span class="sub-parts-label">Key Anatomical Features: <strong id="detail-subparts">Cardia, Fundus, Body, Pyloric Sphincter</strong></span>
               <button class="btn-mini" id="play-pulse-btn">🔊 Sound</button>
             </div>
           </div>

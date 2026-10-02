@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Body Systems | Minimalist Black Theme (1-Screen Viewport)
-   School Science Project • Pure Black Aesthetic • 10s Pencil Sketch
+   Body Systems | Grade 7 Science Project
+   Minimal Black Theme (1-Screen Viewport) with Authentic NIDDK Pencil Sketch
    ========================================================================== */
 
 :root {
@@ -88,16 +88,16 @@ html, body {
 
 .logo-title {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.01em;
   color: var(--text-white);
 }
 
 .logo-badge {
-  font-size: 0.68rem;
-  color: var(--text-dim);
-  font-weight: 500;
+  font-size: 0.7rem;
+  color: var(--accent-blue);
+  font-weight: 600;
 }
 
 /* AI Search Container */
@@ -173,7 +173,7 @@ html, body {
   border-bottom: none;
 }
 
-.search-item:hover, .search-item.highlighted {
+.search-item:hover {
   background: #1f1f23;
 }
 
@@ -244,10 +244,10 @@ html, body {
    ========================================================================== */
 .main-dashboard {
   display: grid;
-  grid-template-columns: 380px 1fr;
+  grid-template-columns: 420px 1fr;
   gap: 0.75rem;
   flex-grow: 1;
-  min-height: 0; /* Important for flex-grow in fixed viewport */
+  min-height: 0;
 }
 
 /* ==========================================================================
@@ -288,6 +288,11 @@ html, body {
   animation: blink 1s infinite;
 }
 
+.sketch-actions {
+  display: flex;
+  gap: 0.65rem;
+}
+
 .btn-text-action {
   background: transparent;
   border: none;
@@ -299,102 +304,118 @@ html, body {
   color: #fff;
 }
 
-/* Sketch Stage & Moving Pencil */
+/* Sketch Stage with Paper & Chalkboard Modes */
 .sketch-stage {
   position: relative;
   flex-grow: 1;
-  background: #000000;
-  border: 1px solid var(--border-subtle);
+  background: #fdfefe;
+  border: 1px solid #d4d4d8;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  transition: background var(--transition);
 }
 
-.pencil-body-svg {
-  width: 100%;
+.sketch-stage.chalkboard-mode {
+  background: #000000;
+  border-color: var(--border-subtle);
+}
+
+.sketch-stage.chalkboard-mode .sketch-img {
+  filter: invert(0.92) contrast(1.2);
+}
+
+.sketch-stage.chalkboard-mode .hotspot-pin {
+  background: rgba(0, 0, 0, 0.85);
+  color: #38bdf8;
+  border-color: #38bdf8;
+}
+
+.sketch-stage.chalkboard-mode .hotspot-pin:hover,
+.sketch-stage.chalkboard-mode .hotspot-pin.active {
+  background: #38bdf8;
+  color: #000000;
+}
+
+.sketch-wrapper {
+  position: relative;
+  height: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sketch-img {
+  height: 100%;
   max-height: 100%;
-  padding: 0.5rem;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
-/* Pencil Strokes Drawing Animation (10-Second Loop) */
-.sketch-path {
-  fill: none;
-  stroke: #d4d4d8;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 900;
-  stroke-dashoffset: 900;
-  animation: drawPencil 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+/* Dynamic 10-Second Reveal Mask (Drawing effect) */
+.drawing-curtain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fdfefe;
+  pointer-events: none;
+  animation: revealSketch 10s ease-in-out infinite;
+  border-bottom: 2px dashed #71717a;
+  z-index: 2;
 }
 
-.body-contour {
-  stroke-width: 1.8;
-  stroke: #ffffff;
+.sketch-stage.chalkboard-mode .drawing-curtain {
+  background: #000000;
 }
 
-.spine-sketch, .ribs-sketch {
-  stroke: #71717a;
-  stroke-width: 1.2;
-}
-
-.organ-path {
-  stroke: #38bdf8;
-  stroke-width: 2;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.organ-path:hover, .organ-path.active {
-  stroke: #ffffff;
-  stroke-width: 3.5;
-  filter: drop-shadow(0 0 6px #ffffff);
-}
-
-/* Moving Pencil Lead Marker */
+/* Animated Moving Pencil */
 .animated-pencil {
   position: absolute;
-  top: 15px;
-  left: 45%;
+  top: 10px;
+  left: 50%;
   pointer-events: none;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   transform: translate(-50%, -50%);
-  animation: pencilFollow 10s ease-in-out infinite;
+  animation: pencilDrawPath 10s ease-in-out infinite;
   z-index: 10;
 }
 
-/* Interactive Sketch Pin */
-.sketch-pointer {
+/* Interactive Hotspot Buttons */
+.interactive-overlay {
   position: absolute;
-  top: 30%;
-  left: 50%;
+  inset: 0;
+  z-index: 4;
+  pointer-events: auto;
+}
+
+.hotspot-pin {
+  position: absolute;
   transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 5;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #0284c7;
+  color: #0284c7;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: var(--transition);
+  white-space: nowrap;
 }
 
-.pointer-dot {
-  width: 8px;
-  height: 8px;
-  background: #38bdf8;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #38bdf8;
-}
-
-.pointer-text {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  background: #18181c;
-  border: 1px solid var(--border-active);
-  padding: 0.15rem 0.45rem;
-  border-radius: 3px;
-  color: #fff;
+.hotspot-pin:hover, .hotspot-pin.active {
+  background: #0284c7;
+  color: #ffffff;
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.4);
 }
 
 .sketch-caption {
@@ -499,15 +520,17 @@ html, body {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
+  max-height: 100px;
+  overflow-y: auto;
 }
 
 .organ-btn {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 0.45rem 0.75rem;
+  padding: 0.35rem 0.65rem;
   color: var(--text-white);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
@@ -697,34 +720,34 @@ html, body {
 }
 
 /* ==========================================================================
-   ANIMATIONS & KEYFRAMES (10s PENCIL SKETCH)
+   ANIMATIONS & KEYFRAMES (10s PENCIL SKETCH OF NIDDK DRAWING)
    ========================================================================== */
-@keyframes drawPencil {
+@keyframes revealSketch {
   0% {
-    stroke-dashoffset: 900;
-    opacity: 0.2;
-  }
-  15% {
+    top: 0%;
     opacity: 1;
   }
-  80% {
-    stroke-dashoffset: 0;
+  85% {
+    top: 100%;
     opacity: 1;
   }
   95%, 100% {
-    stroke-dashoffset: 0;
-    opacity: 1;
+    top: 100%;
+    opacity: 0;
   }
 }
 
-@keyframes pencilFollow {
-  0% { top: 15px; left: 50%; opacity: 0; }
-  5% { top: 25px; left: 50%; opacity: 1; }
-  25% { top: 130px; left: 45%; }
-  50% { top: 220px; left: 52%; }
-  75% { top: 380px; left: 42%; }
-  90% { top: 430px; left: 58%; opacity: 1; }
-  100% { top: 440px; left: 58%; opacity: 0; }
+@keyframes pencilDrawPath {
+  0% { top: 5%; left: 45%; opacity: 0; }
+  5% { top: 8%; left: 42%; opacity: 1; }
+  15% { top: 18%; left: 52%; } /* Head / mouth */
+  25% { top: 25%; left: 52%; } /* Esophagus */
+  40% { top: 36%; left: 60%; } /* Stomach */
+  55% { top: 38%; left: 45%; } /* Liver & Gallbladder */
+  70% { top: 55%; left: 50%; } /* Small Intestine */
+  85% { top: 70%; left: 50%; } /* Large Intestine */
+  95% { top: 85%; left: 50%; opacity: 1; }
+  100% { top: 90%; left: 50%; opacity: 0; }
 }
 
 @keyframes blink {
@@ -752,7 +775,7 @@ html, body {
     grid-template-columns: 1fr;
   }
   .sketch-stage {
-    height: 380px;
+    height: 440px;
   }
   .fact-grid {
     grid-template-columns: 1fr;
