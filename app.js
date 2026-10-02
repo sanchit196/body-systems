@@ -1,838 +1,640 @@
 /**
- * The Living Machine | Human Body Systems Science Project
- * Interactive JavaScript for Middle School Biology Exhibition
- * Features: Dynamic SVG Organ Diagrams, Audio Synth, ECG Simulator,
- * Reflex Tester, Breathing Pacer, and Pop Quiz Engine.
+ * Body Systems | Minimalist Black Theme (1-Screen Viewport)
+ * Systems drill-down engine, AI organ search bar, and 10s pencil sketch pin-pointer.
  */
 
 // =============================================================================
-// 1. ORGAN DATA & INLINE VECTOR DIAGRAMS (100% Human-crafted SVGs)
+// 1. COMPACT SYSTEMS & ORGANS DATABASE
 // =============================================================================
-const ORGAN_DATA = {
-  heart: {
-    title: "The Human Heart",
-    systemBadge: "CIRCULATORY SYSTEM",
-    badgeClass: "heart",
-    tagline: "The Body's Tireless Power Pump",
-    workload: "100,000 beats/day",
-    power: "2,000 gallons of blood",
-    size: "Same size as your fist!",
-    mechanism: "The heart has four chambers: the right side collects oxygen-depleted blood from your body and pumps it to the lungs. The left side receives fresh oxygenated blood from your lungs and sends it speeding through your aorta to fuel every living cell in your body.",
-    superpower: "Your heart has its own internal electrical pacemaker called the Sinoatrial (SA) node! It generates its own electrical pulses, which means it can keep beating even outside the body as long as it has oxygen.",
-    soundType: "heart",
-    svg: `
-      <svg viewBox="0 0 280 280" class="organ-vector-svg" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="heartGrad" cx="50%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#fda4af" />
-            <stop offset="100%" stop-color="#e11d48" />
-          </radialGradient>
-        </defs>
-        <!-- Aorta & Vena Cava -->
-        <path d="M115,70 C115,25 160,25 160,70" fill="none" stroke="#be123c" stroke-width="14" stroke-linecap="round" />
-        <line x1="128" y1="36" x2="128" y2="20" stroke="#be123c" stroke-width="8" stroke-linecap="round" />
-        <line x1="144" y1="36" x2="144" y2="20" stroke="#be123c" stroke-width="8" stroke-linecap="round" />
-        <path d="M80,45 L80,95" stroke="#2563eb" stroke-width="12" stroke-linecap="round" />
-        
-        <!-- Main Heart Body -->
-        <path d="M140,75 C125,45 80,40 60,70 C30,110 40,165 140,240 C240,165 250,110 220,70 C200,40 155,45 140,75 Z" fill="url(#heartGrad)" stroke="#9f1239" stroke-width="4" />
-        
-        <!-- Chamber Divider Lines -->
-        <path d="M140,90 Q138,150 140,225" stroke="#881337" stroke-width="3" stroke-dasharray="6,4" fill="none" />
-        
-        <!-- Internal Labels -->
-        <rect x="68" y="105" width="56" height="24" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
-        <text x="96" y="121" font-size="10" font-weight="bold" fill="#1e40af" text-anchor="middle">R. Atrium</text>
+const SYSTEMS_DATA = {
+  circulatory: {
+    id: "circulatory",
+    title: "Circulatory System",
+    badge: "SYSTEM 01",
+    stats: ["⚡ 100,000 beats/day", "🛣️ 60,000 miles vessels"],
+    organs: [
+      {
+        id: "heart",
+        name: "The Heart",
+        role: "Primary Muscular Pump",
+        emoji: "🫀",
+        func: "Pumps oxygenated blood to your body cells and forces used blood into the lungs.",
+        fact: "Generates its own electrical impulses using the SA node, beating independently!",
+        subparts: "Right/Left Atria, Right/Left Ventricles, Aorta, Valves",
+        pin: { top: "30%", left: "51%", label: "Heart" },
+        sound: "heart"
+      },
+      {
+        id: "arteries",
+        name: "Arteries & Aorta",
+        role: "High-Pressure Delivery Pipes",
+        emoji: "🔴",
+        func: "Carry thick, oxygen-rich bright red blood away from the heart at high pressure.",
+        fact: "The aorta is the thickest blood vessel—about the diameter of a garden hose!",
+        subparts: "Aorta, Carotid Artery, Coronary Arteries",
+        pin: { top: "33%", left: "54%", label: "Arteries" },
+        sound: "beep"
+      },
+      {
+        id: "veins",
+        name: "Veins & Vena Cava",
+        role: "Return Highway",
+        emoji: "🔵",
+        func: "Return deoxygenated blood back to the heart with one-way valves to prevent backflow.",
+        fact: "Veins look blue through your skin because of how red light penetrates tissue!",
+        subparts: "Superior Vena Cava, Inferior Vena Cava, Jugular",
+        pin: { top: "35%", left: "47%", label: "Veins" },
+        sound: "beep"
+      },
+      {
+        id: "capillaries",
+        name: "Capillaries",
+        role: "Microscopic Drop-off Points",
+        emoji: "🕸️",
+        func: "Microscopic single-cell thin tubes where oxygen and nutrients enter cells.",
+        fact: "Ten capillaries bundled together are thinner than a single strand of hair!",
+        subparts: "Arterioles, Capillary Beds, Venules",
+        pin: { top: "45%", left: "50%", label: "Capillaries" },
+        sound: "beep"
+      },
+      {
+        id: "blood",
+        name: "Blood & Plasma",
+        role: "Living Transport Fluid",
+        emoji: "🩸",
+        func: "Carries oxygen (red cells), fights germs (white cells), and clots cuts (platelets).",
+        fact: "Your body makes roughly 2 million fresh red blood cells every single second!",
+        subparts: "Red Blood Cells, White Blood Cells, Platelets, Plasma",
+        pin: { top: "50%", left: "50%", label: "Blood" },
+        sound: "beep"
+      }
+    ]
+  },
 
-        <rect x="64" y="150" width="64" height="24" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
-        <text x="96" y="166" font-size="10" font-weight="bold" fill="#1e40af" text-anchor="middle">R. Ventricle</text>
+  respiratory: {
+    id: "respiratory",
+    title: "Respiratory System",
+    badge: "SYSTEM 02",
+    stats: ["💨 20,000 breaths/day", "🫧 600M Alveoli"],
+    organs: [
+      {
+        id: "lungs",
+        name: "The Lungs",
+        role: "Gas Exchange Sponges",
+        emoji: "🫁",
+        func: "Exchange inhaled oxygen with bloodstream waste carbon dioxide every breath.",
+        fact: "Your left lung is 10% smaller than the right one to leave room for your heart!",
+        subparts: "Right Lobe (3 sections), Left Lobe (2 sections), Pleura",
+        pin: { top: "27%", left: "44%", label: "Lungs" },
+        sound: "breath"
+      },
+      {
+        id: "trachea",
+        name: "Trachea (Windpipe)",
+        role: "Protected Air Tunnel",
+        emoji: "🌬️",
+        func: "Directs air straight down the neck into the chest; protected by cartilage rings.",
+        fact: "Lined with tiny hairs called cilia that sweep dust and germs upward!",
+        subparts: "Cartilage C-Rings, Epiglottis, Larynx (Voice Box)",
+        pin: { top: "20%", left: "50%", label: "Trachea" },
+        sound: "beep"
+      },
+      {
+        id: "alveoli",
+        name: "Alveoli (Air Sacs)",
+        role: "Microscopic Diffusion Chambers",
+        emoji: "🫧",
+        func: "600 million microscopic bubbles where oxygen diffuses directly into capillaries.",
+        fact: "If all alveoli were flattened out, they would cover an entire tennis court!",
+        subparts: "Alveolar Clusters, Surfactant, Capillary Mesh",
+        pin: { top: "29%", left: "55%", label: "Alveoli" },
+        sound: "breath"
+      },
+      {
+        id: "diaphragm",
+        name: "The Diaphragm",
+        role: "Breathing Engine Muscle",
+        emoji: "🎛️",
+        func: "Pulls downward to create negative chest pressure so air rushes into your lungs.",
+        fact: "Hiccups happen when your diaphragm muscle involuntarily spasms!",
+        subparts: "Central Tendon, Sternal & Lumbar Attachments",
+        pin: { top: "36%", left: "50%", label: "Diaphragm" },
+        sound: "beep"
+      }
+    ]
+  },
 
-        <rect x="156" y="105" width="56" height="24" rx="4" fill="#ffffff" stroke="#be123c" stroke-width="1.5" />
-        <text x="184" y="121" font-size="10" font-weight="bold" fill="#881337" text-anchor="middle">L. Atrium</text>
+  nervous: {
+    id: "nervous",
+    title: "Nervous System",
+    badge: "SYSTEM 03",
+    stats: ["⚡ 268 MPH Signal Speed", "🧠 86 Billion Neurons"],
+    organs: [
+      {
+        id: "brain",
+        name: "The Brain",
+        role: "Master Computer",
+        emoji: "🧠",
+        func: "Processes sensory thoughts, controls movement, and regulates automatic breathing.",
+        fact: "Generates enough electrical power (20 Watts) to illuminate a low-watt LED bulb!",
+        subparts: "Cerebrum, Cerebellum, Brainstem, Hypothalamus",
+        pin: { top: "11%", left: "50%", label: "Brain" },
+        sound: "beep"
+      },
+      {
+        id: "spinal-cord",
+        name: "Spinal Cord",
+        role: "Main Neural Super-Highway",
+        emoji: "⚡",
+        func: "Transmits impulses between brain and peripheral nerves down your back.",
+        fact: "Handles emergency reflexes (like pulling your hand off a hot stove) before the brain feels it!",
+        subparts: "Cervical, Thoracic, Lumbar, Sacral Nerves",
+        pin: { top: "35%", left: "50%", label: "Spinal Cord" },
+        sound: "beep"
+      },
+      {
+        id: "neurons",
+        name: "Neurons & Synapses",
+        role: "Microscopic Electrical Wire",
+        emoji: "🔌",
+        func: "Send electrochemical signals across synaptic gaps in fractions of a millisecond.",
+        fact: "Information travels along myelin-insulated axons at over 260 miles per hour!",
+        subparts: "Dendrites, Soma (Cell Body), Axon, Synapse",
+        pin: { top: "14%", left: "52%", label: "Neurons" },
+        sound: "beep"
+      }
+    ]
+  },
 
-        <rect x="152" y="150" width="64" height="24" rx="4" fill="#ffffff" stroke="#be123c" stroke-width="1.5" />
-        <text x="184" y="166" font-size="10" font-weight="bold" fill="#881337" text-anchor="middle">L. Ventricle</text>
-      </svg>
-    `
+  digestive: {
+    id: "digestive",
+    title: "Digestive System",
+    badge: "SYSTEM 04",
+    stats: ["🥪 24-hr Journey", "📏 30 Feet of Tubing"],
+    organs: [
+      {
+        id: "stomach",
+        name: "The Stomach",
+        role: "Acid Liquefier",
+        emoji: "🥣",
+        func: "Churns food with hydrochloric acid (pH 1.5) to liquefy meals into creamy chyme.",
+        fact: "Produces a fresh protective mucus lining every 3 days to avoid digesting itself!",
+        subparts: "Cardia, Fundus, Body, Pyloric Sphincter",
+        pin: { top: "42%", left: "53%", label: "Stomach" },
+        sound: "beep"
+      },
+      {
+        id: "small-intestine",
+        name: "Small Intestine",
+        role: "Master Nutrient Absorber",
+        emoji: "〰️",
+        func: "22-foot coiled tube where microscopic villi absorb 90% of all vitamins and fuel.",
+        fact: "Lined with millions of velvety villi that give it a huge surface area!",
+        subparts: "Duodenum, Jejunum, Ileum, Villi",
+        pin: { top: "50%", left: "50%", label: "Small Intestine" },
+        sound: "beep"
+      },
+      {
+        id: "liver",
+        name: "The Liver",
+        role: "Chemical Detox Plant",
+        emoji: "🧫",
+        func: "Filters toxins from blood, makes digestive bile, and stores glycogen fuel.",
+        fact: "The liver is your largest internal organ and can regenerate itself from a small piece!",
+        subparts: "Left/Right Lobes, Hepatic Artery, Gallbladder",
+        pin: { top: "39%", left: "44%", label: "Liver" },
+        sound: "beep"
+      },
+      {
+        id: "large-intestine",
+        name: "Large Intestine (Colon)",
+        role: "Water Recycler & Waste Collector",
+        emoji: "📦",
+        func: "Reabsorbs water, houses beneficial gut bacteria, and forms compact waste.",
+        fact: "Home to trillions of friendly microbes that produce essential Vitamin K!",
+        subparts: "Cecum, Ascending/Descending Colon, Rectum",
+        pin: { top: "54%", left: "50%", label: "Large Intestine" },
+        sound: "beep"
+      }
+    ]
   },
-  brain: {
-    title: "The Human Brain",
-    systemBadge: "NERVOUS SYSTEM",
-    badgeClass: "brain",
-    tagline: "The Master Command Center",
-    workload: "86 Billion Neurons",
-    power: "20 Watts of Electricity",
-    size: "About 3 lbs (1.4 kg)",
-    mechanism: "The brain processes all sight, sound, touch, and emotions. Signals travel down the spinal cord and throughout the peripheral nerves at up to 268 mph, allowing you to react, move, think, and dream simultaneously.",
-    superpower: "Your brain generates about 20 watts of continuous electrical power—enough to illuminate a low-watt LED light bulb! Even when you are fast asleep, your brain is actively reorganizing memories and clearing metabolic toxins.",
-    soundType: "beep",
-    svg: `
-      <svg viewBox="0 0 280 280" class="organ-vector-svg" xmlns="http://www.w3.org/2000/svg">
-        <!-- Cerebrum Main Brain Outline -->
-        <path d="M85,110 C70,70 110,40 145,40 C190,40 225,70 215,110 C225,135 210,165 180,165 C165,180 135,180 120,165 C90,165 75,135 85,110 Z" fill="#fef3c7" stroke="#d97706" stroke-width="4" />
-        <!-- Gyri / Brain Folds -->
-        <path d="M105,75 Q135,60 165,75 Q195,90 175,115 M115,115 Q140,100 155,130 M135,145 Q150,135 170,145" stroke="#b45309" stroke-width="3" fill="none" stroke-linecap="round" />
-        <!-- Cerebellum -->
-        <ellipse cx="180" cy="175" rx="22" ry="16" fill="#fde68a" stroke="#d97706" stroke-width="3" />
-        <path d="M165,175 Q180,170 195,175 M168,182 Q180,177 192,182" stroke="#b45309" stroke-width="2" fill="none" />
-        <!-- Brain Stem -->
-        <path d="M140,170 L140,245" stroke="#d97706" stroke-width="12" stroke-linecap="round" />
-        <!-- Labels -->
-        <text x="145" y="90" font-size="12" font-weight="bold" fill="#78350f" text-anchor="middle">Cerebrum</text>
-        <text x="215" y="195" font-size="10" font-weight="bold" fill="#92400e">Cerebellum</text>
-        <text x="140" y="260" font-size="10" font-weight="bold" fill="#78350f" text-anchor="middle">Spinal Cord</text>
-      </svg>
-    `
-  },
-  lungs: {
-    title: "The Respiratory Lungs",
-    systemBadge: "RESPIRATORY SYSTEM",
-    badgeClass: "lungs",
-    tagline: "The Vital Oxygen Gas Station",
-    workload: "20,000 breaths/day",
-    power: "600M Tiny Alveoli",
-    size: "Surface of a Tennis Court!",
-    mechanism: "When you inhale, air travels down the trachea (windpipe) and divides into the bronchial tree of each lung. At the microscopic tips, 600 million bubble-like alveoli let oxygen diffuse straight into your red blood cells while picking up carbon dioxide to exhale.",
-    superpower: "Your left lung is about 10% smaller than your right lung to make space for your tilted heart! If you unfolded the surface of all your tiny lung alveoli, they would cover an entire tennis court!",
-    soundType: "breath",
-    svg: `
-      <svg viewBox="0 0 280 280" class="organ-vector-svg" xmlns="http://www.w3.org/2000/svg">
-        <!-- Trachea (Windpipe) -->
-        <path d="M140,30 L140,95" stroke="#0284c7" stroke-width="12" stroke-linecap="round" />
-        <!-- Cartilage Rings -->
-        <line x1="132" y1="45" x2="148" y2="45" stroke="#bae6fd" stroke-width="3" />
-        <line x1="132" y1="60" x2="148" y2="60" stroke="#bae6fd" stroke-width="3" />
-        <line x1="132" y1="75" x2="148" y2="75" stroke="#bae6fd" stroke-width="3" />
-        <!-- Bronchi branches -->
-        <path d="M140,95 L105,130 M140,95 L175,130" stroke="#0284c7" stroke-width="8" stroke-linecap="round" />
-        
-        <!-- Left & Right Lung Lobes -->
-        <path d="M105,120 C75,130 55,165 60,205 C68,235 105,230 120,215 C128,195 128,145 105,120 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="4" />
-        <path d="M175,120 C205,130 225,165 220,205 C212,235 175,230 160,215 C152,195 152,145 175,120 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="4" />
-        
-        <!-- Diaphragm -->
-        <path d="M50,245 Q140,220 230,245" stroke="#ea580c" stroke-width="4" fill="none" stroke-dasharray="6,3" />
-        <!-- Labels -->
-        <text x="140" y="25" font-size="11" font-weight="bold" fill="#0369a1" text-anchor="middle">Trachea</text>
-        <text x="85" y="180" font-size="11" font-weight="bold" fill="#0369a1" text-anchor="middle">Right Lung</text>
-        <text x="195" y="180" font-size="11" font-weight="bold" fill="#0369a1" text-anchor="middle">Left Lung</text>
-        <text x="140" y="260" font-size="10" font-weight="bold" fill="#c2410c" text-anchor="middle">Diaphragm Muscle</text>
-      </svg>
-    `
-  },
-  stomach: {
-    title: "Stomach & Digestion",
-    systemBadge: "DIGESTIVE SYSTEM",
-    badgeClass: "stomach",
-    tagline: "The Body's Chemical Fuel Refinery",
-    workload: "pH 1.5 - 2.0 (Hydrochloric Acid)",
-    power: "Absorbs 90% in Small Intestine",
-    size: "Stretches 4x its empty size!",
-    mechanism: "Food enters the esophagus and lands in the stomach, where muscular contractions churn it with hydrochloric acid and enzymes. The liquefied nutrients then pass into the 22-foot small intestine, where millions of microscopic villi absorb vitamins and nutrients.",
-    superpower: "Stomach acid is so powerful it could dissolve metal nails! To keep from digesting itself, your stomach secretes a protective mucus barrier that completely renews itself every three days.",
-    soundType: "beep",
-    svg: `
-      <svg viewBox="0 0 280 280" class="organ-vector-svg" xmlns="http://www.w3.org/2000/svg">
-        <!-- Esophagus -->
-        <line x1="140" y1="20" x2="140" y2="65" stroke="#ea580c" stroke-width="8" stroke-linecap="round" />
-        
-        <!-- Stomach J-shape -->
-        <path d="M140,65 C160,65 190,75 185,110 C180,150 125,150 115,130 C105,115 125,85 140,65 Z" fill="#ffedd5" stroke="#ea580c" stroke-width="4" />
-        
-        <!-- Liver -->
-        <path d="M70,75 C95,65 120,70 120,95 C115,120 85,125 75,110 Z" fill="#fee2e2" stroke="#dc2626" stroke-width="3" />
-        
-        <!-- Small & Large Intestine Box -->
-        <rect x="95" y="155" width="90" height="70" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="4" />
-        <path d="M110,180 Q140,170 170,180 M115,195 Q140,205 165,195" stroke="#16a34a" stroke-width="3" fill="none" stroke-linecap="round" />
-        
-        <!-- Labels -->
-        <text x="88" y="100" font-size="10" font-weight="bold" fill="#991b1b" text-anchor="middle">Liver</text>
-        <text x="155" y="112" font-size="11" font-weight="bold" fill="#9a3412" text-anchor="middle">Stomach</text>
-        <text x="140" y="215" font-size="11" font-weight="bold" fill="#166534" text-anchor="middle">Intestines</text>
-      </svg>
-    `
-  },
-  kidneys: {
-    title: "The Dual Kidneys",
-    systemBadge: "EXCRETORY & CIRCULATORY",
-    badgeClass: "kidneys",
-    tagline: "The Master Blood Purification Filters",
-    workload: "50 Gallons Filtered Daily",
-    power: "2 Million Nephron Units",
-    size: "About 4 inches (Soap Bar)",
-    mechanism: "Arterial blood enters the kidneys, where 2 million microscopic filtering units called nephrons remove toxins, extra fluid, and metabolic wastes. Pure, cleansed blood returns to circulation while wastes are sent down the ureters to the bladder.",
-    superpower: "Your kidneys filter your entire body's blood supply approximately 40 times every single day! You only need about 75% of one kidney to live completely healthily.",
-    soundType: "beep",
-    svg: `
-      <svg viewBox="0 0 280 280" class="organ-vector-svg" xmlns="http://www.w3.org/2000/svg">
-        <!-- Vena Cava & Aorta -->
-        <line x1="130" y1="30" x2="130" y2="240" stroke="#2563eb" stroke-width="8" stroke-linecap="round" />
-        <line x1="150" y1="30" x2="150" y2="240" stroke="#dc2626" stroke-width="8" stroke-linecap="round" />
-        
-        <!-- Left Kidney -->
-        <path d="M85,90 C105,90 100,120 105,145 C100,170 85,170 75,150 C65,130 65,110 75,95 Z" fill="#fecaca" stroke="#b91c1c" stroke-width="4" />
-        <!-- Right Kidney -->
-        <path d="M195,95 C175,95 180,125 175,150 C180,175 195,175 205,155 C215,135 215,115 205,100 Z" fill="#fecaca" stroke="#b91c1c" stroke-width="4" />
-        
-        <!-- Renal Vessels -->
-        <line x1="105" y1="130" x2="130" y2="130" stroke="#2563eb" stroke-width="4" />
-        <line x1="150" y1="135" x2="175" y2="135" stroke="#dc2626" stroke-width="4" />
-        
-        <!-- Ureters -->
-        <path d="M95,155 Q105,210 135,235" stroke="#f59e0b" stroke-width="3" fill="none" />
-        <path d="M185,160 Q175,210 145,235" stroke="#f59e0b" stroke-width="3" fill="none" />
-        
-        <!-- Labels -->
-        <text x="85" y="80" font-size="11" font-weight="bold" fill="#991b1b" text-anchor="middle">Kidney</text>
-        <text x="195" y="80" font-size="11" font-weight="bold" fill="#991b1b" text-anchor="middle">Kidney</text>
-        <text x="140" y="255" font-size="10" font-weight="bold" fill="#b45309" text-anchor="middle">Ureters to Bladder</text>
-      </svg>
-    `
-  },
-  skeleton: {
+
+  skeletal: {
+    id: "skeletal",
     title: "Skeletal & Muscular System",
-    systemBadge: "SKELETAL & MUSCULAR",
-    badgeClass: "skeleton",
-    tagline: "The Living Armor & Movement Motor",
-    workload: "206 Living Bones",
-    power: "4x Stronger than Concrete",
-    size: "600+ Contracting Muscles",
-    mechanism: "Bones provide a strong, protective framework while bone marrow creates 2 million red blood cells each second. Muscles work in opposing pairs (like biceps and triceps) contracting and pulling bones like levers to let you run, throw, and smile!",
-    superpower: "Bone is living, self-healing tissue that constantly rebuilds itself. Ounce for ounce, human bone has a higher tensile strength than reinforced steel!",
-    soundType: "beep",
-    svg: `
-      <svg viewBox="0 0 280 280" class="organ-vector-svg" xmlns="http://www.w3.org/2000/svg">
-        <!-- Skull -->
-        <ellipse cx="140" cy="40" rx="20" ry="18" fill="#f8fafc" stroke="#475569" stroke-width="3" />
-        <circle cx="133" cy="40" r="3" fill="#475569" />
-        <circle cx="147" cy="40" r="3" fill="#475569" />
-        <!-- Spine -->
-        <line x1="140" y1="60" x2="140" y2="170" stroke="#475569" stroke-width="5" stroke-linecap="round" />
-        <!-- Ribcage -->
-        <ellipse cx="140" cy="100" rx="30" ry="24" fill="none" stroke="#475569" stroke-width="3" />
-        <line x1="115" y1="92" x2="165" y2="92" stroke="#475569" stroke-width="2" />
-        <line x1="112" y1="105" x2="168" y2="105" stroke="#475569" stroke-width="2" />
-        <!-- Arm & Muscle -->
-        <line x1="110" y1="75" x2="80" y2="120" stroke="#475569" stroke-width="4" stroke-linecap="round" />
-        <path d="M140,75 L180,100 L200,135" stroke="#475569" stroke-width="4" stroke-linecap="round" fill="none" />
-        <!-- Bicep Muscle highlight -->
-        <path d="M155,80 Q180,85 178,110" stroke="#ef4444" stroke-width="6" stroke-linecap="round" fill="none" />
-        <!-- Pelvis & Legs -->
-        <path d="M120,170 C130,160 150,160 160,170 C150,190 130,190 120,170 Z" fill="#e2e8f0" stroke="#475569" stroke-width="3" />
-        <line x1="125" y1="185" x2="115" y2="250" stroke="#475569" stroke-width="5" stroke-linecap="round" />
-        <line x1="155" y1="185" x2="165" y2="250" stroke="#475569" stroke-width="5" stroke-linecap="round" />
-        
-        <!-- Labels -->
-        <text x="140" y="20" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">Cranium (Skull)</text>
-        <text x="195" y="85" font-size="10" font-weight="bold" fill="#dc2626">Bicep Muscle</text>
-        <text x="140" y="268" font-size="10" font-weight="bold" fill="#334155" text-anchor="middle">Femur (Strongest Bone)</text>
-      </svg>
-    `
+    badge: "SYSTEM 05",
+    stats: ["🦴 206 Bones", "💪 600+ Muscles"],
+    organs: [
+      {
+        id: "femur",
+        name: "Femur (Thigh Bone)",
+        role: "Strongest Structural Pillar",
+        emoji: "🦴",
+        func: "Supports body weight during running and jumping; produces marrow blood cells.",
+        fact: "Stronger than solid concrete and reinforced steel ounce-for-ounce!",
+        subparts: "Femoral Head, Shaft, Condyles",
+        pin: { top: "72%", left: "44%", label: "Femur Bone" },
+        sound: "beep"
+      },
+      {
+        id: "skull",
+        name: "Skull (Cranium)",
+        role: "Brain Shield",
+        emoji: "💀",
+        func: "Encases and shields the delicate brain tissue and supports facial sensory organs.",
+        fact: "Babies are born with 270 soft bones that fuse into the 206 adult bones!",
+        subparts: "Cranial Bones, Mandible (Jaw), Sutures",
+        pin: { top: "10%", left: "50%", label: "Skull" },
+        sound: "beep"
+      },
+      {
+        id: "ribcage",
+        name: "Rib Cage",
+        role: "Protective Chest Armor",
+        emoji: "🦺",
+        func: "12 pairs of curved bones shielding your heart and lungs that expand as you breathe.",
+        fact: "Connected by flexible cartilage so your chest can expand with every breath!",
+        subparts: "Sternum, True Ribs, Floating Ribs",
+        pin: { top: "28%", left: "50%", label: "Rib Cage" },
+        sound: "beep"
+      },
+      {
+        id: "biceps",
+        name: "Skeletal Muscles",
+        role: "Opposing Pull Motors",
+        emoji: "💪",
+        func: "Muscles pull bones like levers. When biceps contract, triceps relax!",
+        fact: "You use over 200 muscles just to take one single step forward!",
+        subparts: "Muscle Fibers, Tendons, Actin & Myosin Filaments",
+        pin: { top: "33%", left: "68%", label: "Bicep Muscle" },
+        sound: "beep"
+      }
+    ]
+  },
+
+  excretory: {
+    id: "excretory",
+    title: "Excretory System",
+    badge: "SYSTEM 06",
+    stats: ["🩸 50 Gallons Filtered/day", "2M Nephrons"],
+    organs: [
+      {
+        id: "kidneys",
+        name: "The Kidneys",
+        role: "Blood Purification Filters",
+        emoji: "🩸",
+        func: "Filter waste urea and extra fluids from blood roughly 40 times every single day.",
+        fact: "You only need about 75% of one single kidney to live a full, normal life!",
+        subparts: "Renal Cortex, Nephrons, Renal Pelvis",
+        pin: { top: "45%", left: "44%", label: "Kidneys" },
+        sound: "beep"
+      },
+      {
+        id: "bladder",
+        name: "The Bladder",
+        role: "Expandable Fluid Storage",
+        emoji: "🎈",
+        func: "Hollow elastic pouch that holds liquid waste funneled down by the ureters.",
+        fact: "Can stretch to hold about 2 cups (500ml) of fluid safely!",
+        subparts: "Detrusor Muscle, Ureters, Urethra",
+        pin: { top: "58%", left: "50%", label: "Bladder" },
+        sound: "beep"
+      }
+    ]
   }
 };
 
 // =============================================================================
-// 2. AUDIO SYNTHESIZER (Web Audio API)
+// 2. WEB AUDIO SYNTHESIZER
 // =============================================================================
-class SimpleAudio {
+class MinimalAudio {
   constructor() {
     this.ctx = null;
     this.enabled = true;
   }
-
   init() {
     if (!this.ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (AC) this.ctx = new AC();
     }
   }
-
   toggle() {
     this.enabled = !this.enabled;
     return this.enabled;
   }
-
   playHeartbeat() {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
-    this.thump(t, 85, 45, 0.12, 0.35);
-    this.thump(t + 0.16, 110, 50, 0.12, 0.3);
+    this.thump(t, 85, 45, 0.1, 0.3);
+    this.thump(t + 0.16, 110, 50, 0.1, 0.25);
   }
-
-  thump(time, startF, endF, dur, vol) {
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(startF, time);
-    osc.frequency.exponentialRampToValueAtTime(endF, time + dur);
-    gain.gain.setValueAtTime(vol, time);
-    gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start(time);
-    osc.stop(time + dur);
+  thump(t, startF, endF, dur, vol) {
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.frequency.setValueAtTime(startF, t);
+    o.frequency.exponentialRampToValueAtTime(endF, t + dur);
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g);
+    g.connect(this.ctx.destination);
+    o.start(t);
+    o.stop(t + dur);
   }
-
-  playBeep(freq = 550, dur = 0.08) {
+  playBeep(freq = 520, dur = 0.06) {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(freq, t);
-    gain.gain.setValueAtTime(0.12, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start(t);
-    osc.stop(t + dur);
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.1, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g);
+    g.connect(this.ctx.destination);
+    o.start(t);
+    o.stop(t + dur);
+  }
+}
+const audio = new MinimalAudio();
+
+// =============================================================================
+// 3. MAIN DASHBOARD CONTROLLER
+// =============================================================================
+let activeSysKey = "circulatory";
+let activeOrganId = "heart";
+
+function selectSystem(sysKey, targetOrganId = null) {
+  const sysData = SYSTEMS_DATA[sysKey];
+  if (!sysData) return;
+
+  activeSysKey = sysKey;
+
+  // Update System Chips
+  document.querySelectorAll(".sys-chip").forEach(chip => {
+    chip.classList.toggle("active", chip.getAttribute("data-sys") === sysKey);
+  });
+
+  // Update Summary Header
+  document.getElementById("sys-badge").textContent = sysData.badge;
+  document.getElementById("sys-title").textContent = sysData.title;
+  document.getElementById("sys-stat-1").textContent = sysData.stats[0];
+  document.getElementById("sys-stat-2").textContent = sysData.stats[1];
+
+  // Render Organ Buttons List
+  const organsList = document.getElementById("organs-list");
+  organsList.innerHTML = "";
+
+  sysData.organs.forEach(organ => {
+    const btn = document.createElement("button");
+    btn.className = "organ-btn";
+    btn.setAttribute("data-organ-id", organ.id);
+    btn.innerHTML = `${organ.emoji} ${organ.name}`;
+    btn.addEventListener("click", () => selectOrgan(organ));
+    organsList.appendChild(btn);
+  });
+
+  // Select target organ or default to first organ
+  const chosenOrgan = targetOrganId
+    ? sysData.organs.find(o => o.id === targetOrganId) || sysData.organs[0]
+    : sysData.organs[0];
+
+  selectOrgan(chosenOrgan);
+}
+
+function selectOrgan(organ) {
+  activeOrganId = organ.id;
+
+  // Highlight active button
+  document.querySelectorAll(".organ-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-organ-id") === organ.id);
+  });
+
+  // Update Fact Card
+  document.getElementById("detail-emoji").textContent = organ.emoji;
+  document.getElementById("detail-name").textContent = organ.name;
+  document.getElementById("detail-role").textContent = organ.role;
+  document.getElementById("detail-function").textContent = organ.func;
+  document.getElementById("detail-fact").textContent = organ.fact;
+  document.getElementById("detail-subparts").textContent = organ.subparts;
+
+  // Move Pencil Sketch Pointer Pin
+  const pointer = document.getElementById("sketch-pointer");
+  const pointerText = document.getElementById("pointer-text");
+  if (pointer && organ.pin) {
+    pointer.style.top = organ.pin.top;
+    pointer.style.left = organ.pin.left;
+    pointerText.textContent = organ.pin.label;
   }
 
-  playSuccess() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
-    const t = this.ctx.currentTime;
-    [523.25, 659.25, 783.99, 1046.5].forEach((f, idx) => {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.frequency.value = f;
-      gain.gain.setValueAtTime(0.08, t + idx * 0.08);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.08 + 0.25);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(t + idx * 0.08);
-      osc.stop(t + idx * 0.08 + 0.25);
-    });
-  }
+  // Highlight corresponding path in pencil sketch if present
+  document.querySelectorAll(".organ-path").forEach(p => p.classList.remove("active"));
+  const sketchNode = document.querySelector(`.organ-path[data-part="${organ.id}"]`);
+  if (sketchNode) sketchNode.classList.add("active");
 
-  playError() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(180, t);
-    osc.frequency.linearRampToValueAtTime(120, t + 0.2);
-    gain.gain.setValueAtTime(0.15, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start(t);
-    osc.stop(t + 0.2);
+  // Play audio cue
+  if (organ.sound === "heart") {
+    audio.playHeartbeat();
+  } else {
+    audio.playBeep(560, 0.05);
   }
 }
 
-const sound = new SimpleAudio();
-
 // =============================================================================
-// 3. EXPLORER CONTROLLER
+// 4. AI SEARCH BOX (Instant Intelligent Organ Lookup)
 // =============================================================================
-function initExplorer() {
-  const tabs = document.querySelectorAll(".sys-tab");
-  const diagramContainer = document.getElementById("diagram-container");
-  const organBadge = document.getElementById("organ-badge");
-  const organTitle = document.getElementById("organ-title");
-  const organTagline = document.getElementById("organ-tagline");
-  const statWorkload = document.getElementById("stat-workload");
-  const statPower = document.getElementById("stat-power");
-  const statSize = document.getElementById("stat-size");
-  const organMechanism = document.getElementById("organ-mechanism");
-  const organSuperpower = document.getElementById("organ-superpower");
-  const soundBtn = document.getElementById("organ-sound-btn");
+function initAiSearch() {
+  const searchInput = document.getElementById("ai-search-input");
+  const dropdown = document.getElementById("search-dropdown");
+  const clearBtn = document.getElementById("clear-search-btn");
 
-  let currentKey = "heart";
-
-  function renderOrgan(key) {
-    const data = ORGAN_DATA[key];
-    if (!data) return;
-
-    currentKey = key;
-
-    tabs.forEach(t => {
-      t.classList.toggle("active", t.getAttribute("data-organ") === key);
-    });
-
-    diagramContainer.innerHTML = data.svg;
-    organBadge.textContent = data.systemBadge;
-    organTitle.textContent = data.title;
-    organTagline.textContent = data.tagline;
-    statWorkload.textContent = data.workload;
-    statPower.textContent = data.power;
-    statSize.textContent = data.size;
-    organMechanism.textContent = data.mechanism;
-    organSuperpower.textContent = data.superpower;
-
-    if (data.soundType === "heart") {
-      sound.playHeartbeat();
-    } else {
-      sound.playBeep(520, 0.06);
-    }
-  }
-
-  tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      renderOrgan(tab.getAttribute("data-organ"));
+  // Build searchable index of all organs & aliases
+  const searchIndex = [];
+  Object.keys(SYSTEMS_DATA).forEach(sysKey => {
+    const sys = SYSTEMS_DATA[sysKey];
+    sys.organs.forEach(organ => {
+      searchIndex.push({
+        name: organ.name,
+        sysKey: sysKey,
+        sysTitle: sys.title,
+        organ: organ,
+        keywords: `${organ.name} ${organ.role} ${organ.func} ${organ.fact} ${organ.subparts} ${sys.title}`.toLowerCase()
+      });
     });
   });
 
-  if (soundBtn) {
-    soundBtn.addEventListener("click", () => {
-      if (currentKey === "heart") sound.playHeartbeat();
-      else sound.playBeep(600, 0.1);
-    });
-  }
-
-  renderOrgan("heart");
-}
-
-// =============================================================================
-// 4. LAB 1: ECG CANVAS WAVEFORM
-// =============================================================================
-function initEcg() {
-  const canvas = document.getElementById("ecg-canvas");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const slider = document.getElementById("bpm-slider");
-  const bpmDisplay = document.getElementById("bpm-display-val");
-  const bpmReadout = document.getElementById("ecg-readout-bpm");
-  const tagReadout = document.getElementById("ecg-readout-tag");
-  const presetPills = document.querySelectorAll(".preset-pill");
-  const scienceFact = document.getElementById("ecg-science-fact");
-
-  let bpm = 75;
-  let x = 0;
-  const w = canvas.width;
-  const h = canvas.height;
-  let lastBeat = 0;
-
-  function updateBpm(newVal) {
-    bpm = parseInt(newVal, 10);
-    slider.value = bpm;
-    bpmDisplay.textContent = `${bpm} Beats / Minute`;
-    bpmReadout.textContent = `${bpm} BPM`;
-
-    let tag = "Normal Resting";
-    let fact = `At ${bpm} BPM, your heart pumps ~1.3 gallons of blood every minute to your cells.`;
-
-    if (bpm < 60) {
-      tag = "Deep Sleep";
-      fact = `At ${bpm} BPM, the parasympathetic nervous system conserves energy while muscles rest.`;
-    } else if (bpm >= 60 && bpm <= 100) {
-      tag = "Normal / Study Mode";
-      fact = `At ${bpm} BPM, your cardiac cycle delivers the perfect balance of oxygen to your brain.`;
-    } else if (bpm > 100 && bpm < 150) {
-      tag = "Brisk Walk / Jog";
-      fact = `At ${bpm} BPM, your working leg muscles demand double the oxygen volume!`;
-    } else {
-      tag = "Gym Sprint / High Activity";
-      fact = `At ${bpm} BPM, the heart pumps up to 5 times more blood per minute than at rest!`;
+  function performSearch(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      dropdown.classList.add("hidden");
+      clearBtn.classList.add("hidden");
+      return;
     }
 
-    tagReadout.textContent = tag;
-    scienceFact.textContent = fact;
+    clearBtn.classList.remove("hidden");
 
-    presetPills.forEach(p => {
-      p.classList.toggle("active", parseInt(p.getAttribute("data-bpm"), 10) === bpm);
+    // Match keywords
+    const matches = searchIndex.filter(item => item.keywords.includes(q)).slice(0, 5);
+
+    if (matches.length === 0) {
+      dropdown.innerHTML = `<div class="search-item"><div class="search-item-top">No exact match for "${query}"</div><div class="search-item-desc">Try typing Heart, Brain, Lungs, Femur, Alveoli, or Stomach!</div></div>`;
+      dropdown.classList.remove("hidden");
+      return;
+    }
+
+    dropdown.innerHTML = "";
+    matches.forEach(item => {
+      const el = document.createElement("div");
+      el.className = "search-item";
+      el.innerHTML = `
+        <div class="search-item-top">
+          <span>${item.organ.emoji} ${item.organ.name}</span>
+          <span class="search-item-sys">${item.sysTitle}</span>
+        </div>
+        <div class="search-item-desc">${item.organ.func.slice(0, 75)}...</div>
+      `;
+      el.addEventListener("click", () => {
+        selectSystem(item.sysKey, item.organ.id);
+        dropdown.classList.add("hidden");
+        searchInput.value = item.organ.name;
+        audio.playBeep(640, 0.05);
+      });
+      dropdown.appendChild(el);
     });
+
+    dropdown.classList.remove("hidden");
   }
 
-  slider.addEventListener("input", e => updateBpm(e.target.value));
+  searchInput.addEventListener("input", e => performSearch(e.target.value));
 
-  presetPills.forEach(pill => {
-    pill.addEventListener("click", () => {
-      updateBpm(pill.getAttribute("data-bpm"));
-      sound.playBeep(480, 0.05);
-    });
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    dropdown.classList.add("hidden");
+    clearBtn.classList.add("hidden");
   });
 
-  ctx.fillStyle = "#0f172a";
-  ctx.fillRect(0, 0, w, h);
-
-  function getY(p) {
-    const mid = h / 2;
-    if (p > 0.1 && p < 0.2) return mid - Math.sin((p - 0.1) * 10 * Math.PI) * 10;
-    if (p >= 0.28 && p < 0.3) return mid + 8;
-    if (p >= 0.3 && p < 0.35) return mid - 45;
-    if (p >= 0.35 && p < 0.38) return mid + 16;
-    if (p > 0.45 && p < 0.6) return mid - Math.sin((p - 0.45) * 6.6 * Math.PI) * 14;
-    return mid + (Math.random() - 0.5) * 1.5;
-  }
-
-  let prevY = h / 2;
-
-  function loop(time) {
-    const cycle = 60000 / bpm;
-    if (time - lastBeat > cycle) {
-      lastBeat = time;
-      sound.playHeartbeat();
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".search-container")) {
+      dropdown.classList.add("hidden");
     }
-
-    const step = 2.5;
-    const nextX = (x + step) % w;
-
-    ctx.fillStyle = "rgba(15, 23, 42, 0.25)";
-    ctx.fillRect(nextX, 0, 16, h);
-
-    const phase = (time % cycle) / cycle;
-    const curY = getY(phase);
-
-    ctx.beginPath();
-    ctx.strokeStyle = "#38bdf8";
-    ctx.lineWidth = 2.2;
-    ctx.moveTo(x, prevY);
-    ctx.lineTo(nextX, curY);
-    ctx.stroke();
-
-    x = nextX;
-    prevY = curY;
-
-    requestAnimationFrame(loop);
-  }
-
-  requestAnimationFrame(loop);
+  });
 }
 
 // =============================================================================
-// 5. LAB 2: REFLEX TESTER
+// 5. PENCIL SKETCH ANIMATION CONTROLLER (10-Second Loop)
 // =============================================================================
-function initReflex() {
-  const pad = document.getElementById("reflex-pad");
-  const mainText = document.getElementById("reflex-main-text");
-  const subText = document.getElementById("reflex-sub-text");
-  const icon = document.getElementById("reflex-icon");
-  const startBtn = document.getElementById("reflex-start-btn");
-  const bestDisp = document.getElementById("reflex-best-ms");
+function initPencilSketch() {
+  const restartBtn = document.getElementById("restart-sketch-btn");
+  const svg = document.getElementById("pencil-svg");
+  const pencilTip = document.getElementById("pencil-tip");
 
-  let state = "idle";
-  let timeout = null;
-  let startTime = 0;
-  let best = Infinity;
+  function replaySketch() {
+    // Reset animation by triggering reflow
+    const paths = svg.querySelectorAll(".sketch-path");
+    paths.forEach(p => {
+      p.style.animation = "none";
+      void p.offsetWidth;
+      p.style.animation = "";
+    });
 
-  function start() {
-    state = "waiting";
-    pad.className = "reflex-pad waiting";
-    icon.textContent = "⏳";
-    mainText.textContent = "Get Ready...";
-    subText.textContent = "Wait for the box to turn GREEN!";
-    startBtn.disabled = true;
+    if (pencilTip) {
+      pencilTip.style.animation = "none";
+      void pencilTip.offsetWidth;
+      pencilTip.style.animation = "";
+    }
 
-    const delay = Math.random() * 2000 + 1500;
-    timeout = setTimeout(() => {
-      state = "ready";
-      startTime = performance.now();
-      pad.className = "reflex-pad ready";
-      icon.textContent = "⚡";
-      mainText.textContent = "CLICK NOW!";
-      subText.textContent = "Click as fast as you can!";
-      sound.playBeep(800, 0.05);
-    }, delay);
+    audio.playBeep(520, 0.06);
   }
 
-  function handlePadClick() {
-    if (state === "waiting") {
-      clearTimeout(timeout);
-      state = "idle";
-      pad.className = "reflex-pad";
-      icon.textContent = "⚠️";
-      mainText.textContent = "Too early!";
-      subText.textContent = "Wait until the green color appears.";
-      startBtn.disabled = false;
-      sound.playError();
-    } else if (state === "ready") {
-      const ms = Math.round(performance.now() - startTime);
-      state = "idle";
-      pad.className = "reflex-pad";
-      icon.textContent = "🎯";
-      mainText.textContent = `${ms} milliseconds!`;
+  if (restartBtn) restartBtn.addEventListener("click", replaySketch);
 
-      if (ms < best) {
-        best = ms;
-        bestDisp.textContent = `${best} ms`;
+  // Click on SVG organs directly
+  document.querySelectorAll(".organ-path").forEach(node => {
+    node.addEventListener("click", () => {
+      const part = node.getAttribute("data-part");
+      // Find which system holds this organ
+      for (const sKey of Object.keys(SYSTEMS_DATA)) {
+        const found = SYSTEMS_DATA[sKey].organs.find(o => o.id === part);
+        if (found) {
+          selectSystem(sKey, found.id);
+          break;
+        }
       }
-
-      subText.textContent = ms < 250 ? "Lightning fast! Faster than average!" : "Great reaction! Normal human speed is ~250ms.";
-      startBtn.disabled = false;
-      startBtn.textContent = "Test Again";
-      sound.playSuccess();
-    }
-  }
-
-  startBtn.addEventListener("click", start);
-  pad.addEventListener("click", handlePadClick);
-}
-
-// =============================================================================
-// 6. LAB 3: BREATH PACER
-// =============================================================================
-function initBreath() {
-  const circle = document.getElementById("lung-circle");
-  const stepName = document.getElementById("breath-step-name");
-  const counter = document.getElementById("breath-counter");
-  const btn = document.getElementById("breath-toggle-btn");
-
-  let running = false;
-  let interval = null;
-  let count = 4;
-  let phase = 0;
-
-  const phases = [
-    { text: "Inhale (O2 In)", cls: "inhale" },
-    { text: "Hold Air", cls: "hold" },
-    { text: "Exhale (CO2 Out)", cls: "exhale" },
-    { text: "Rest", cls: "hold" }
-  ];
-
-  function tick() {
-    counter.textContent = `${count}s`;
-    if (count <= 0) {
-      phase = (phase + 1) % phases.length;
-      count = 4;
-      const cur = phases[phase];
-      stepName.textContent = cur.text;
-      circle.className = `lung-circle ${cur.cls}`;
-      sound.playBeep(450 + phase * 50, 0.05);
-    }
-    count--;
-  }
-
-  btn.addEventListener("click", () => {
-    if (running) {
-      running = false;
-      clearInterval(interval);
-      circle.className = "lung-circle";
-      stepName.textContent = "Inhale (Oxygen)";
-      counter.textContent = "4s";
-      btn.textContent = "▶ Start Breathing Exercise";
-    } else {
-      running = true;
-      count = 4;
-      phase = 0;
-      circle.className = "lung-circle inhale";
-      stepName.textContent = "Inhale (Oxygen)";
-      interval = setInterval(tick, 1000);
-      btn.textContent = "⏹ Stop Exercise";
-      sound.playBeep(520, 0.08);
-    }
-  });
-}
-
-// =============================================================================
-// 7. LAB 4: DIGESTION TIMELINE
-// =============================================================================
-function initDigestion() {
-  const steps = document.querySelectorAll(".t-step");
-  steps.forEach(s => {
-    s.addEventListener("click", () => {
-      steps.forEach(x => x.classList.remove("active"));
-      s.classList.add("active");
-      sound.playBeep(550, 0.04);
     });
   });
 }
 
 // =============================================================================
-// 8. SECTION 4: POP QUIZ
+// 6. MODAL & QR CODE
 // =============================================================================
-const QUIZ_QUESTIONS = [
-  {
-    icon: "🫀",
-    q: "Which organ pumps oxygen-rich blood through your arteries?",
-    options: ["The Lungs", "The Heart", "The Liver", "The Kidneys"],
-    answer: 1,
-    info: "The heart pumps about 2,000 gallons of blood every day through your 60,000 miles of blood vessels!"
-  },
-  {
-    icon: "🧠",
-    q: "What are the microscopic electrical cells that communicate in your brain?",
-    options: ["Neurons", "Alveoli", "Nephrons", "Platelets"],
-    answer: 0,
-    info: "Your brain has about 86 billion neurons firing electrical impulses at speeds up to 268 mph!"
-  },
-  {
-    icon: "🫁",
-    q: "Where does oxygen diffuse into the blood inside your lungs?",
-    options: ["Trachea", "Diaphragm", "Alveoli (Air Sacs)", "Epiglottis"],
-    answer: 2,
-    info: "Over 600 million microscopic alveoli air sacs provide a surface area as large as a tennis court!"
-  },
-  {
-    icon: "🥪",
-    q: "Where does 90% of all food nutrient absorption happen in the body?",
-    options: ["The Stomach", "The Small Intestine", "The Large Intestine", "The Mouth"],
-    answer: 1,
-    info: "The small intestine is 22 feet long and lined with tiny villi fingers that absorb nutrients into the blood!"
-  },
-  {
-    icon: "🦴",
-    q: "How many living bones are found inside an adult human body?",
-    options: ["106 Bones", "206 Bones", "306 Bones", "500 Bones"],
-    answer: 1,
-    info: "Adults have 206 bones; babies are born with around 270 soft bones that gradually fuse together!"
-  }
-];
-
-function initQuiz() {
-  const qIndexDisp = document.getElementById("q-index-disp");
-  const qScoreDisp = document.getElementById("q-score-disp");
-  const progressBar = document.getElementById("quiz-progress-bar");
-  const qIcon = document.getElementById("q-icon");
-  const qText = document.getElementById("q-text");
-  const choicesContainer = document.getElementById("quiz-choices-container");
-  const feedbackBanner = document.getElementById("quiz-feedback-banner");
-  const feedbackText = document.getElementById("quiz-feedback-text");
-  const nextBtn = document.getElementById("quiz-next-question-btn");
-
-  const quizCard = document.getElementById("quiz-main-card");
-  const certCard = document.getElementById("quiz-cert-card");
-  const certScore = document.getElementById("cert-final-score");
-  const retakeBtn = document.getElementById("retake-quiz-btn");
-
-  let current = 0;
-  let score = 0;
-  let locked = false;
-
-  function loadQ(idx) {
-    locked = false;
-    const item = QUIZ_QUESTIONS[idx];
-    qIndexDisp.textContent = idx + 1;
-    qIcon.textContent = item.icon;
-    qText.textContent = item.q;
-    progressBar.style.width = `${((idx + 1) / QUIZ_QUESTIONS.length) * 100}%`;
-    feedbackBanner.classList.add("hidden");
-    choicesContainer.innerHTML = "";
-
-    item.options.forEach((opt, oIdx) => {
-      const btn = document.createElement("button");
-      btn.className = "quiz-btn";
-      btn.textContent = `${String.fromCharCode(65 + oIdx)}. ${opt}`;
-      btn.addEventListener("click", () => handleAnswer(oIdx, btn));
-      choicesContainer.appendChild(btn);
-    });
-  }
-
-  function handleAnswer(choiceIdx, btnEl) {
-    if (locked) return;
-    locked = true;
-
-    const item = QUIZ_QUESTIONS[current];
-    const allBtns = choicesContainer.querySelectorAll(".quiz-btn");
-
-    if (choiceIdx === item.answer) {
-      score++;
-      qScoreDisp.textContent = score;
-      btnEl.classList.add("correct");
-      feedbackText.innerHTML = `🎉 <strong>Correct!</strong> ${item.info}`;
-      feedbackBanner.style.borderColor = "#22c55e";
-      sound.playSuccess();
-    } else {
-      btnEl.classList.add("wrong");
-      allBtns[item.answer].classList.add("correct");
-      feedbackText.innerHTML = `❌ <strong>Not quite!</strong> ${item.info}`;
-      feedbackBanner.style.borderColor = "#ef4444";
-      sound.playError();
-    }
-
-    feedbackBanner.classList.remove("hidden");
-    nextBtn.textContent = current === QUIZ_QUESTIONS.length - 1 ? "View Certificate 🏆" : "Next Question ➔";
-  }
-
-  nextBtn.addEventListener("click", () => {
-    if (current < QUIZ_QUESTIONS.length - 1) {
-      current++;
-      loadQ(current);
-      sound.playBeep(580, 0.04);
-    } else {
-      quizCard.classList.add("hidden");
-      certCard.classList.remove("hidden");
-      certScore.textContent = `${score}/5`;
-      sound.playSuccess();
-    }
-  });
-
-  retakeBtn.addEventListener("click", () => {
-    current = 0;
-    score = 0;
-    qScoreDisp.textContent = "0";
-    certCard.classList.add("hidden");
-    quizCard.classList.remove("hidden");
-    loadQ(0);
-    sound.playBeep(500, 0.05);
-  });
-
-  loadQ(0);
-}
-
-// =============================================================================
-// 9. QR CODE & COPY LINK
-// =============================================================================
-function initQr() {
-  const copyBtn = document.getElementById("copy-url-btn");
-  const copyInput = document.getElementById("site-url-input");
-  const copyAlert = document.getElementById("copy-alert");
-
-  const openModal = document.getElementById("open-qr-modal-btn");
-  const closeModal = document.getElementById("modal-close-btn");
-  const dismissModal = document.getElementById("modal-dismiss-btn");
-  const modalCopy = document.getElementById("modal-copy-btn");
+function initModal() {
+  const qrBtn = document.getElementById("qr-btn");
   const modal = document.getElementById("qr-modal");
+  const closeBtn = document.getElementById("modal-close-btn");
+  const doneBtn = document.getElementById("modal-done-btn");
+  const copyBtn = document.getElementById("modal-copy-btn");
 
-  function copy(val) {
-    navigator.clipboard.writeText(val).then(() => {
-      copyAlert.classList.add("show");
-      setTimeout(() => copyAlert.classList.remove("show"), 2500);
-      sound.playSuccess();
-    }).catch(() => {
-      copyInput.select();
-      document.execCommand("copy");
-      copyAlert.classList.add("show");
-      setTimeout(() => copyAlert.classList.remove("show"), 2500);
-    });
-  }
-
-  if (copyBtn) copyBtn.addEventListener("click", () => copy(copyInput.value));
-  if (modalCopy) modalCopy.addEventListener("click", () => copy("https://sanchit196.github.io/body-systems/"));
-
-  if (openModal) {
-    openModal.addEventListener("click", () => {
+  if (qrBtn) {
+    qrBtn.addEventListener("click", () => {
       modal.classList.remove("hidden");
-      sound.playBeep(600, 0.04);
+      audio.playBeep(600, 0.04);
     });
   }
 
   const hide = () => modal.classList.add("hidden");
-  if (closeModal) closeModal.addEventListener("click", hide);
-  if (dismissModal) dismissModal.addEventListener("click", hide);
+  if (closeBtn) closeBtn.addEventListener("click", hide);
+  if (doneBtn) doneBtn.addEventListener("click", hide);
   modal.addEventListener("click", e => { if (e.target === modal) hide(); });
 
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText("https://sanchit196.github.io/body-systems/").then(() => {
+        copyBtn.textContent = "✓ Copied!";
+        setTimeout(() => copyBtn.textContent = "📋 Copy Link", 2000);
+        audio.playBeep(700, 0.06);
+      });
+    });
+  }
+
+  // Audio Toggle Button
   const audioToggle = document.getElementById("audio-toggle-btn");
-  const audioIcon = document.getElementById("audio-icon");
   if (audioToggle) {
     audioToggle.addEventListener("click", () => {
-      const on = sound.toggle();
-      audioIcon.textContent = on ? "🔊" : "🔇";
-      if (on) sound.playBeep(600, 0.04);
+      const on = audio.toggle();
+      audioToggle.textContent = on ? "🔊" : "🔇";
+      if (on) audio.playBeep(600, 0.04);
+    });
+  }
+
+  // Sound button on fact card
+  const playPulseBtn = document.getElementById("play-pulse-btn");
+  if (playPulseBtn) {
+    playPulseBtn.addEventListener("click", () => {
+      if (activeOrganId === "heart") audio.playHeartbeat();
+      else audio.playBeep(600, 0.08);
     });
   }
 }
 
 // =============================================================================
-// INITIALIZE ON LOAD
+// DOM READY
 // =============================================================================
 document.addEventListener("DOMContentLoaded", () => {
-  initExplorer();
-  initEcg();
-  initReflex();
-  initBreath();
-  initDigestion();
-  initQuiz();
-  initQr();
-  console.log("Body Systems Project initialized! Ready for Middle School Science Exhibition.");
+  // Initialize systems bar listeners
+  document.querySelectorAll(".sys-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      selectSystem(chip.getAttribute("data-sys"));
+    });
+  });
+
+  initAiSearch();
+  initPencilSketch();
+  initModal();
+
+  // Load default system
+  selectSystem("circulatory", "heart");
+
+  console.log("Body Systems Minimal 1-Screen loaded cleanly.");
 });

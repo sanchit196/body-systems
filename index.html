@@ -3,814 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Living Machine | Human Body Systems Science Project</title>
-  <meta name="description" content="An interactive, visual middle-school science project exploring the 5 human body systems through diagrams, live simulators, and interactive labs.">
-  <meta name="keywords" content="Human Body Systems, Science Project, Middle School Biology, Circulatory System, Respiratory System, Nervous System, Digestive System, Skeletal System">
+  <title>Body Systems | Minimalist Student Science Project</title>
+  <meta name="description" content="A minimal, 1-screen interactive body systems project with pencil sketch animation, system drill-downs, and instant organ search.">
   
-  <!-- Modern Clean Typography -->
+  <!-- Clean Inter & Space Grotesk Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫀</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
 </head>
-<body>
+<body class="theme-black">
 
-  <!-- TOP ANNOUNCEMENT BAR -->
-  <div class="top-banner">
-    <div class="top-banner-inner">
-      <span>🎒 <strong>Grade 7 & 8 Science Exhibition Project</strong> • Topic: Human Body Systems</span>
-      <a href="#qr-section" class="banner-link">📱 Open on Mobile (QR Code) ➔</a>
-    </div>
+  <!-- APP CONTAINER (1-SCREEN VIEWPORT) -->
+  <div class="app-viewport">
+    
+    <!-- MINIMAL TOP BAR -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <span class="pencil-icon">✏️</span>
+        <div class="logo-group">
+          <span class="logo-title">BODY SYSTEMS</span>
+          <span class="logo-badge">Grade 7/8 Science Project</span>
+        </div>
+      </div>
+
+      <!-- AI ORGAN SEARCH BAR -->
+      <div class="search-container">
+        <div class="search-input-wrap">
+          <span class="search-icon">✨</span>
+          <input type="text" id="ai-search-input" placeholder="Ask or search any body part (e.g. Heart, Femur, Alveoli)..." autocomplete="off">
+          <button id="clear-search-btn" class="clear-btn hidden">&times;</button>
+        </div>
+        <!-- SEARCH RESULTS DROPDOWN -->
+        <div class="search-dropdown hidden" id="search-dropdown"></div>
+      </div>
+
+      <div class="nav-right">
+        <button id="audio-toggle-btn" class="btn-icon" title="Toggle Sound">🔊</button>
+        <button id="qr-btn" class="btn-minimal"><span>📱 QR Code</span></button>
+      </div>
+    </header>
+
+    <!-- MAIN DASHBOARD (1 SCREEN, DUAL PANEL) -->
+    <main class="main-dashboard">
+      
+      <!-- LEFT PANEL: 10-SECOND PENCIL SKETCH ANIMATION -->
+      <section class="sketch-panel">
+        <div class="panel-header">
+          <div class="sketch-status">
+            <span class="rec-dot"></span>
+            <span id="sketch-timer-label">PENCIL SKETCH • 10s LOOP</span>
+          </div>
+          <button id="restart-sketch-btn" class="btn-text-action" title="Replay Pencil Sketch">🔄 Redraw</button>
+        </div>
+
+        <div class="sketch-stage" id="sketch-stage">
+          <!-- Animated Moving Pencil Hand -->
+          <div class="animated-pencil" id="pencil-tip">
+            <span class="pencil-lead">✏️</span>
+          </div>
+
+          <!-- THE PENCIL SKETCH SVG (Chalk / Pencil on Black Board) -->
+          <svg viewBox="0 0 340 500" class="pencil-body-svg" id="pencil-svg" xmlns="http://www.w3.org/2000/svg">
+            <filter id="pencilGlow">
+              <feGaussianBlur stdDeviation="0.8" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <!-- Anatomical Outline (Animated Pencil Path) -->
+            <path class="sketch-path body-contour" d="M170,25 C185,25 195,38 195,58 C195,78 186,88 182,95 C196,102 216,112 228,126 C240,140 252,175 258,215 C262,245 260,265 254,275 C248,278 242,272 238,255 C232,230 230,190 224,175 C222,210 218,255 216,305 C214,350 212,390 208,440 C206,455 196,455 192,440 C186,395 180,340 176,305 C173,285 167,285 164,305 C160,340 154,395 148,440 C144,455 134,455 132,440 C128,390 126,350 124,305 C122,255 118,210 116,175 C110,190 108,230 102,255 C98,272 92,278 86,275 C80,265 78,245 82,215 C88,175 100,140 112,126 C124,112 144,102 158,95 C154,88 145,78 145,58 C145,38 155,25 170,25 Z" />
+
+            <!-- Spine & Rib Cage Sketches -->
+            <path class="sketch-path spine-sketch" d="M170,95 L170,270" />
+            <path class="sketch-path ribs-sketch" d="M150,130 Q170,125 190,130 M145,150 Q170,145 195,150 M145,170 Q170,165 195,170 M150,190 Q170,185 190,190" />
+
+            <!-- Brain Sketch -->
+            <path class="sketch-path organ-path" id="sketch-brain" data-part="brain" d="M155,56 C150,38 185,38 185,56 C190,70 150,70 155,56 Z" />
+            
+            <!-- Lungs Sketch -->
+            <path class="sketch-path organ-path" id="sketch-lungs" data-part="lungs" d="M148,125 C138,130 134,150 137,170 C140,180 152,180 156,170 C159,160 159,135 148,125 Z M192,125 C202,130 206,150 203,170 C200,180 188,180 184,170 C181,160 181,135 192,125 Z" />
+
+            <!-- Heart Sketch -->
+            <path class="sketch-path organ-path" id="sketch-heart" data-part="heart" d="M172,145 C165,135 152,140 155,155 C160,175 173,185 173,185 C173,185 186,175 191,155 C194,140 181,135 172,145 Z" />
+
+            <!-- Stomach Sketch -->
+            <path class="sketch-path organ-path" id="sketch-stomach" data-part="stomach" d="M162,200 C175,195 188,205 184,222 C180,235 160,235 156,220 Z" />
+
+            <!-- Intestines Sketch -->
+            <path class="sketch-path organ-path" id="sketch-intestines" data-part="small-intestine" d="M152,240 Q170,235 188,240 Q170,250 152,250 Q170,260 188,260" />
+
+            <!-- Femur Bones -->
+            <line class="sketch-path" x1="148" y1="310" x2="142" y2="400" />
+            <line class="sketch-path" x1="192" y1="310" x2="198" y2="400" />
+          </svg>
+
+          <!-- Interactive Highlight Overlay Pin -->
+          <div class="sketch-pointer" id="sketch-pointer">
+            <span class="pointer-dot"></span>
+            <span class="pointer-text" id="pointer-text">Heart</span>
+          </div>
+        </div>
+
+        <div class="sketch-caption">
+          <span>✍️ Hand-drawn Anatomical Sketch</span>
+          <span class="caption-hint">Tap any organ on right to pinpoint</span>
+        </div>
+      </section>
+
+      <!-- RIGHT PANEL: MINIMAL SYSTEM & ORGAN DRILL-DOWN -->
+      <section class="explorer-panel">
+        
+        <!-- SYSTEM SELECTOR CHIPS -->
+        <div class="systems-bar">
+          <button class="sys-chip active" data-sys="circulatory">🫀 Circulatory</button>
+          <button class="sys-chip" data-sys="respiratory">🫁 Respiratory</button>
+          <button class="sys-chip" data-sys="nervous">🧠 Nervous</button>
+          <button class="sys-chip" data-sys="digestive">🥪 Digestive</button>
+          <button class="sys-chip" data-sys="skeletal">🦴 Skeletal</button>
+          <button class="sys-chip" data-sys="excretory">🩸 Excretory</button>
+        </div>
+
+        <!-- DRILL-DOWN STAGE -->
+        <div class="drilldown-stage">
+          
+          <!-- SYSTEM HEADER INFO -->
+          <div class="system-summary">
+            <div class="summary-left">
+              <span class="sys-badge" id="sys-badge">SYSTEM 01</span>
+              <h2 class="sys-title" id="sys-title">Circulatory System</h2>
+            </div>
+            <div class="summary-stats">
+              <span class="sys-stat-chip" id="sys-stat-1">⚡ 100,000 beats/day</span>
+              <span class="sys-stat-chip" id="sys-stat-2">🛣️ 60,000 miles vessels</span>
+            </div>
+          </div>
+
+          <!-- ORGANS LIST (CLICK TO REVEAL SHORT FACT) -->
+          <div class="organs-list" id="organs-list">
+            <!-- Dynamic organ pills generated via JS -->
+          </div>
+
+          <!-- SHORT FACT & FUNCTION DISPLAY CARD -->
+          <div class="fact-card" id="fact-card">
+            <div class="fact-header">
+              <span class="fact-organ-emoji" id="detail-emoji">🫀</span>
+              <div>
+                <h3 class="fact-organ-name" id="detail-name">The Heart</h3>
+                <span class="fact-organ-role" id="detail-role">Primary Muscular Pump</span>
+              </div>
+            </div>
+
+            <div class="fact-grid">
+              <div class="fact-cell">
+                <span class="cell-label">Primary Function:</span>
+                <p id="detail-function">Pumps oxygenated blood to all cells and returns deoxygenated blood to lungs.</p>
+              </div>
+              <div class="fact-cell">
+                <span class="cell-label">Quick Science Fact:</span>
+                <p id="detail-fact">Has its own electrical pacemaker (SA node) so it can beat independently!</p>
+              </div>
+            </div>
+
+            <!-- MINI ACTION ROW -->
+            <div class="fact-footer">
+              <span class="sub-parts-label">Sub-parts: <strong id="detail-subparts">4 Chambers (Atria & Ventricles), Aorta, Valves</strong></span>
+              <button class="btn-mini" id="play-pulse-btn">🔊 Sound</button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
   </div>
 
-  <!-- NAVIGATION BAR -->
-  <header class="navbar" id="main-nav">
-    <div class="nav-container">
-      <a href="#hero" class="brand-logo">
-        <div class="brand-icon-box">
-          <span>🫀</span>
-        </div>
-        <div class="brand-text">
-          <span class="brand-title">Body<span class="brand-accent">Systems</span></span>
-          <span class="brand-tag">Interactive Science Fair Project</span>
-        </div>
-      </a>
-
-      <nav class="nav-links">
-        <a href="#body-explorer" class="nav-link">🔬 Body Explorer</a>
-        <a href="#systems-gallery" class="nav-link">📚 The 5 Systems</a>
-        <a href="#interactive-labs" class="nav-link">⚡ Science Labs</a>
-        <a href="#trivia-quiz" class="nav-link">🎯 Pop Quiz</a>
-        <a href="#qr-section" class="nav-link nav-link-special">📱 Mobile QR</a>
-      </nav>
-
-      <div class="nav-actions">
-        <button id="audio-toggle-btn" class="icon-btn" title="Toggle Sound Effects" aria-label="Toggle sound">
-          <span id="audio-icon">🔊</span>
-        </button>
-        <button id="open-qr-modal-btn" class="btn btn-sm btn-outline">
-          <span>📲 Scan QR</span>
-        </button>
+  <!-- QR CODE MODAL -->
+  <div class="modal-bg hidden" id="qr-modal">
+    <div class="modal-box">
+      <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+      <span class="modal-tag">MOBILE COMPANION</span>
+      <h3>Scan on Your Phone</h3>
+      <p>Point any mobile camera at this QR code to view this 1-scroll project live:</p>
+      <div class="modal-qr">
+        <img src="qrcode.png" alt="Scan QR Code">
       </div>
-    </div>
-  </header>
-
-  <main>
-    <!-- HERO SECTION -->
-    <section class="hero-section" id="hero">
-      <div class="hero-container">
-        <div class="hero-text-col">
-          <div class="student-badge">
-            <span class="badge-dot"></span> Student Biology Showcase • Age 13
-          </div>
-          <h1 class="hero-title">
-            The Living Machine: <br>
-            <span class="highlight-gradient">How Your Body Systems Work Together!</span>
-          </h1>
-          <p class="hero-lead">
-            Welcome to my science exhibition project! Instead of reading long, boring paragraphs from an old textbook, explore the 5 vital body systems through clean visual diagrams, real-time pulse simulators, and interactive experiments.
-          </p>
-
-          <!-- QUICK FACTS CHIPS -->
-          <div class="hero-quick-facts">
-            <div class="fact-card">
-              <span class="fact-icon">🫀</span>
-              <div>
-                <strong>100,000</strong>
-                <p>Heartbeats every day</p>
-              </div>
-            </div>
-            <div class="fact-card">
-              <span class="fact-icon">🧠</span>
-              <div>
-                <strong>86 Billion</strong>
-                <p>Neurons in your brain</p>
-              </div>
-            </div>
-            <div class="fact-card">
-              <span class="fact-icon">🫁</span>
-              <div>
-                <strong>20,000</strong>
-                <p>Breaths every 24 hours</p>
-              </div>
-            </div>
-            <div class="fact-card">
-              <span class="fact-icon">🦴</span>
-              <div>
-                <strong>206</strong>
-                <p>Living bones in adults</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="hero-buttons">
-            <a href="#body-explorer" class="btn btn-primary">
-              <span>🚀 Explore Body Diagram</span>
-            </a>
-            <a href="#interactive-labs" class="btn btn-secondary">
-              <span>⚡ Try Heart & Reflex Labs</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- HERO VISUAL: CLEAN INTERACTIVE POSTER PREVIEW -->
-        <div class="hero-visual-col">
-          <div class="poster-card">
-            <div class="poster-header">
-              <span class="window-dot red"></span>
-              <span class="window-dot yellow"></span>
-              <span class="window-dot green"></span>
-              <span class="poster-title-bar">Human Body Interactive Diagram • v2.0</span>
-            </div>
-
-            <!-- HUMAN BODY SVG OVERVIEW -->
-            <div class="poster-body">
-              <svg viewBox="0 0 360 480" class="hero-body-svg" xmlns="http://www.w3.org/2000/svg">
-                <!-- Head & Body Outline -->
-                <path d="M180,30 C195,30 205,42 205,62 C205,82 195,92 192,100 C204,106 226,116 238,130 C250,144 265,185 272,230 C276,260 274,285 268,295 C263,300 256,295 252,275 C246,245 244,200 236,180 C234,220 230,270 228,320 C226,360 224,400 220,445 C218,460 206,460 202,445 C196,400 190,340 185,300 C182,280 178,280 175,300 C170,340 164,400 158,445 C154,460 142,460 140,445 C136,400 134,360 132,320 C130,270 126,220 124,180 C116,200 114,245 108,275 C104,295 97,300 92,295 C86,285 84,260 88,230 C95,185 110,144 122,130 C134,116 156,106 168,100 C165,92 155,82 155,62 C155,42 165,30 180,30 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2.5" />
-
-                <!-- Spine & Ribs Sketch -->
-                <line x1="180" y1="100" x2="180" y2="280" stroke="#cbd5e1" stroke-width="4" stroke-dasharray="3,3" />
-                <path d="M160,140 Q180,135 200,140 M155,160 Q180,155 205,160 M155,180 Q180,175 205,180 M160,200 Q180,195 200,200" stroke="#cbd5e1" stroke-width="2" fill="none" />
-
-                <!-- Organs -->
-                <!-- Brain -->
-                <ellipse cx="180" cy="62" rx="20" ry="18" fill="#fde68a" stroke="#d97706" stroke-width="2" />
-                <text x="180" y="67" text-anchor="middle" font-size="14">🧠</text>
-
-                <!-- Lungs -->
-                <path d="M158,135 C150,140 144,160 147,180 C150,192 162,192 168,183 C171,175 171,143 158,135 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2" />
-                <path d="M202,135 C210,140 216,160 213,180 C210,192 198,192 192,183 C189,175 189,143 202,135 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2" />
-                <text x="180" y="142" text-anchor="middle" font-size="14">🫁</text>
-
-                <!-- Heart -->
-                <circle cx="182" cy="162" r="15" fill="#fecdd3" stroke="#e11d48" stroke-width="2" />
-                <text x="182" y="167" text-anchor="middle" font-size="15">🫀</text>
-
-                <!-- Stomach -->
-                <ellipse cx="184" cy="215" rx="16" ry="12" fill="#fed7aa" stroke="#ea580c" stroke-width="2" />
-                <text x="184" y="220" text-anchor="middle" font-size="13">🥣</text>
-
-                <!-- Intestines -->
-                <rect x="165" y="240" width="30" height="26" rx="8" fill="#bbf7d0" stroke="#16a34a" stroke-width="2" />
-                <text x="180" y="258" text-anchor="middle" font-size="13">🥪</text>
-
-                <!-- Bone Knees -->
-                <circle cx="152" cy="350" r="7" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5" />
-                <circle cx="208" cy="350" r="7" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5" />
-                <text x="180" y="355" text-anchor="middle" font-size="13">🦴</text>
-
-                <!-- Callout Badges -->
-                <g class="hero-callout" transform="translate(20, 50)">
-                  <rect width="95" height="32" rx="6" fill="#ffffff" stroke="#d97706" stroke-width="1.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-                  <text x="47" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400e">🧠 Brain (Nerves)</text>
-                </g>
-                <line x1="115" y1="65" x2="160" y2="62" stroke="#d97706" stroke-width="1.5" stroke-dasharray="2,2" />
-
-                <g class="hero-callout" transform="translate(245, 145)">
-                  <rect width="95" height="32" rx="6" fill="#ffffff" stroke="#e11d48" stroke-width="1.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-                  <text x="47" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#9f1239">🫀 Heart (Pumping)</text>
-                </g>
-                <line x1="245" y1="162" x2="198" y2="162" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="2,2" />
-
-                <g class="hero-callout" transform="translate(20, 205)">
-                  <rect width="105" height="32" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-                  <text x="52" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#075985">🫁 Lungs (Oxygen)</text>
-                </g>
-                <line x1="125" y1="215" x2="160" y2="175" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="2,2" />
-
-                <g class="hero-callout" transform="translate(245, 235)">
-                  <rect width="95" height="32" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-                  <text x="47" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#166534">🥪 Digestion</text>
-                </g>
-                <line x1="245" y1="250" x2="198" y2="245" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="2,2" />
-              </svg>
-            </div>
-
-            <div class="poster-footer">
-              <span class="live-dot"></span> Click any organ below to see what it does!
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 1: INTERACTIVE BODY EXPLORER (CLEAN STUDENT WORKBENCH) -->
-    <section class="section explorer-section" id="body-explorer">
-      <div class="section-title-wrap">
-        <span class="section-pill">Interactive Exploration</span>
-        <h2 class="section-heading">Tap & Learn: <span class="highlight">The Body Explorer</span></h2>
-        <p class="section-subtext">Click on any organ tab to view how it functions, its superpower, and fun school facts!</p>
-      </div>
-
-      <div class="explorer-workbench">
-        <!-- SYSTEM SELECTOR BUTTONS -->
-        <div class="system-tabs">
-          <button class="sys-tab active" data-organ="heart">
-            <span class="tab-emoji">🫀</span>
-            <span class="tab-name">Heart & Blood</span>
-          </button>
-          <button class="sys-tab" data-organ="brain">
-            <span class="tab-emoji">🧠</span>
-            <span class="tab-name">Brain & Nerves</span>
-          </button>
-          <button class="sys-tab" data-organ="lungs">
-            <span class="tab-emoji">🫁</span>
-            <span class="tab-name">Lungs & Oxygen</span>
-          </button>
-          <button class="sys-tab" data-organ="stomach">
-            <span class="tab-emoji">🥣</span>
-            <span class="tab-name">Stomach & Digestion</span>
-          </button>
-          <button class="sys-tab" data-organ="kidneys">
-            <span class="tab-emoji">🩸</span>
-            <span class="tab-name">Kidneys (Filter)</span>
-          </button>
-          <button class="sys-tab" data-organ="skeleton">
-            <span class="tab-emoji">🦴</span>
-            <span class="tab-name">Bones & Muscles</span>
-          </button>
-        </div>
-
-        <!-- MAIN SHOWCASE CARD -->
-        <div class="explorer-card" id="explorer-card">
-          <!-- LEFT: CLEAN EDUCATIONAL VECTOR DIAGRAM -->
-          <div class="explorer-diagram-col" id="diagram-container">
-            <!-- Dynamic SVG inserted here -->
-          </div>
-
-          <!-- RIGHT: KID-FRIENDLY ORGAN FACT SHEET -->
-          <div class="explorer-content-col">
-            <div class="organ-header">
-              <span class="organ-badge" id="organ-badge">CIRCULATORY SYSTEM</span>
-              <h3 class="organ-title" id="organ-title">The Human Heart</h3>
-              <p class="organ-tagline" id="organ-tagline">The Body's Tireless Power Pump</p>
-            </div>
-
-            <!-- KEY NUMBERS -->
-            <div class="organ-stats-row">
-              <div class="mini-stat">
-                <span class="mini-label">Workload:</span>
-                <strong id="stat-workload">100,000 beats/day</strong>
-              </div>
-              <div class="mini-stat">
-                <span class="mini-label">Pumping Power:</span>
-                <strong id="stat-power">2,000 gallons of blood</strong>
-              </div>
-              <div class="mini-stat">
-                <span class="mini-label">Average Size:</span>
-                <strong id="stat-size">Same size as your fist!</strong>
-              </div>
-            </div>
-
-            <!-- HOW IT WORKS (CLEAN & SIMPLE) -->
-            <div class="organ-box box-blue">
-              <h4>⚙️ How It Works:</h4>
-              <p id="organ-mechanism">
-                The heart is a hollow muscular organ with four chambers. The right side receives oxygen-used blood from the body and sends it to the lungs. The left side takes fresh, oxygen-rich blood from the lungs and pumps it through arteries to nourish every cell!
-              </p>
-            </div>
-
-            <!-- STUDENT SUPERPOWER FACT -->
-            <div class="organ-box box-amber">
-              <h4>🌟 Cool Superpower:</h4>
-              <p id="organ-superpower">
-                The heart makes its own electrical pulses using a tiny cluster of cells called the SA Node! Because it has its own electrical system, it can keep beating even outside the body as long as it has oxygen!
-              </p>
-            </div>
-
-            <!-- INTERACTION BUTTONS -->
-            <div class="organ-cta-row">
-              <button class="btn btn-sm btn-primary" id="organ-sound-btn">
-                <span>🔊 Listen to Sound</span>
-              </button>
-              <a href="#interactive-labs" class="btn btn-sm btn-outline">
-                <span>🧪 Test In Science Lab ➔</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 2: THE 5 SYSTEMS PICTORIAL GALLERY -->
-    <section class="section systems-gallery" id="systems-gallery">
-      <div class="section-title-wrap">
-        <span class="section-pill">Visual Study Cards</span>
-        <h2 class="section-heading">The Big 5 <span class="highlight">Body Systems</span></h2>
-        <p class="section-subtext">Clean, pictorial cards illustrating each organ system with anatomical functions and key diagrams.</p>
-      </div>
-
-      <div class="systems-grid">
-        <!-- SYSTEM 1: CIRCULATORY -->
-        <article class="system-box">
-          <div class="box-icon-strip heart-strip">
-            <span class="icon">🫀</span>
-            <span class="system-name">Circulatory System</span>
-          </div>
-          <div class="box-svg-diagram">
-            <!-- Custom Clean SVG Heart -->
-            <svg viewBox="0 0 240 180" class="mini-diagram-svg" xmlns="http://www.w3.org/2000/svg">
-              <!-- Heart muscle silhouette -->
-              <path d="M120,45 C110,25 80,20 65,40 C45,65 50,105 120,155 C190,105 195,65 175,40 C160,20 130,25 120,45 Z" fill="#ffe4e6" stroke="#e11d48" stroke-width="3" />
-              <!-- Aorta arch -->
-              <path d="M105,45 C105,15 135,15 135,45" fill="none" stroke="#e11d48" stroke-width="6" stroke-linecap="round" />
-              <line x1="115" y1="20" x2="115" y2="10" stroke="#e11d48" stroke-width="4" stroke-linecap="round" />
-              <line x1="125" y1="20" x2="125" y2="10" stroke="#e11d48" stroke-width="4" stroke-linecap="round" />
-              <!-- Vena Cava -->
-              <path d="M75,30 L75,60" stroke="#2563eb" stroke-width="5" stroke-linecap="round" />
-              <!-- Chamber divider -->
-              <line x1="120" y1="55" x2="120" y2="140" stroke="#e11d48" stroke-width="2" stroke-dasharray="4,3" />
-              <!-- Blood direction labels -->
-              <text x="85" y="90" font-size="10" font-weight="bold" fill="#2563eb">Right Atrium</text>
-              <text x="80" y="115" font-size="10" font-weight="bold" fill="#2563eb">Right Ventricle</text>
-              <text x="135" y="90" font-size="10" font-weight="bold" fill="#e11d48">Left Atrium</text>
-              <text x="135" y="115" font-size="10" font-weight="bold" fill="#e11d48">Left Ventricle</text>
-            </svg>
-          </div>
-          <div class="box-content">
-            <h3>The Body's Delivery Highway</h3>
-            <p>
-              Your blood travels through roughly <strong>60,000 miles</strong> of vessels (arteries, veins, and microscopic capillaries). If unraveled, they would circle the Earth more than twice!
-            </p>
-            <ul class="bullet-list">
-              <li><strong>Arteries:</strong> Carry oxygen-filled red blood away from heart.</li>
-              <li><strong>Veins:</strong> Bring oxygen-depleted blood back to the heart.</li>
-              <li><strong>Capillaries:</strong> Tiny vessels where nutrients cross into cells.</li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- SYSTEM 2: RESPIRATORY -->
-        <article class="system-box">
-          <div class="box-icon-strip lungs-strip">
-            <span class="icon">🫁</span>
-            <span class="system-name">Respiratory System</span>
-          </div>
-          <div class="box-svg-diagram">
-            <svg viewBox="0 0 240 180" class="mini-diagram-svg" xmlns="http://www.w3.org/2000/svg">
-              <!-- Trachea -->
-              <path d="M120,20 L120,65" stroke="#0284c7" stroke-width="7" stroke-linecap="round" />
-              <line x1="114" y1="30" x2="126" y2="30" stroke="#bae6fd" stroke-width="2" />
-              <line x1="114" y1="42" x2="126" y2="42" stroke="#bae6fd" stroke-width="2" />
-              <line x1="114" y1="54" x2="126" y2="54" stroke="#bae6fd" stroke-width="2" />
-              <!-- Bronchi split -->
-              <path d="M120,65 L95,90 M120,65 L145,90" stroke="#0284c7" stroke-width="4" stroke-linecap="round" />
-              <!-- Lungs Lobes -->
-              <path d="M95,85 C75,90 60,115 65,145 C70,165 95,160 105,150 C110,135 110,100 95,85 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.5" />
-              <path d="M145,85 C165,90 180,115 175,145 C170,165 145,160 135,150 C130,135 130,100 145,85 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.5" />
-              <!-- Diaphragm Curve -->
-              <path d="M55,165 Q120,145 185,165" stroke="#ea580c" stroke-width="3" fill="none" stroke-dasharray="4,2" />
-              <text x="120" y="177" text-anchor="middle" font-size="9" fill="#c2410c" font-weight="bold">Diaphragm Muscle</text>
-            </svg>
-          </div>
-          <div class="box-content">
-            <h3>The Oxygen Gas Station</h3>
-            <p>
-              Every minute, your lungs inhale oxygen for your cells and exhale waste carbon dioxide through over <strong>600 million microscopic air sacs</strong> called alveoli.
-            </p>
-            <ul class="bullet-list">
-              <li><strong>Trachea:</strong> The sturdy windpipe protected by cartilage rings.</li>
-              <li><strong>Alveoli:</strong> Tiny clusters that have the surface of a tennis court!</li>
-              <li><strong>Diaphragm:</strong> The dome muscle that pulls air into your chest.</li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- SYSTEM 3: NERVOUS -->
-        <article class="system-box">
-          <div class="box-icon-strip brain-strip">
-            <span class="icon">🧠</span>
-            <span class="system-name">Nervous System</span>
-          </div>
-          <div class="box-svg-diagram">
-            <svg viewBox="0 0 240 180" class="mini-diagram-svg" xmlns="http://www.w3.org/2000/svg">
-              <!-- Brain lobes -->
-              <path d="M80,70 C70,45 100,25 125,25 C155,25 175,45 170,70 C175,85 165,105 145,105 C135,115 110,115 100,105 C80,105 70,85 80,70 Z" fill="#fef3c7" stroke="#d97706" stroke-width="2.5" />
-              <!-- Brain folds -->
-              <path d="M95,50 Q115,40 135,50 Q155,60 140,75 M105,75 Q120,65 130,85" stroke="#d97706" stroke-width="1.8" fill="none" />
-              <!-- Cerebellum & Stem -->
-              <ellipse cx="145" cy="110" rx="14" ry="10" fill="#fde68a" stroke="#d97706" stroke-width="1.5" />
-              <path d="M125,108 L125,160" stroke="#d97706" stroke-width="6" stroke-linecap="round" />
-              <!-- Nerve branches -->
-              <path d="M125,125 L95,140 M125,140 L155,155 M125,145 L85,160" stroke="#d97706" stroke-width="2" stroke-linecap="round" />
-              <text x="125" y="175" text-anchor="middle" font-size="9" fill="#b45309" font-weight="bold">Spinal Cord & Nerves</text>
-            </svg>
-          </div>
-          <div class="box-content">
-            <h3>The Master Electric Supercomputer</h3>
-            <p>
-              Your brain and spinal cord form the Central Nervous System. Neurons send lightning-fast electrical signals at speeds up to <strong>268 miles per hour</strong>!
-            </p>
-            <ul class="bullet-list">
-              <li><strong>Cerebrum:</strong> Controls thinking, memory, speech, and senses.</li>
-              <li><strong>Cerebellum:</strong> Manages balance, posture, and coordination.</li>
-              <li><strong>Brainstem:</strong> Automatically handles breathing and heart rate.</li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- SYSTEM 4: DIGESTIVE -->
-        <article class="system-box">
-          <div class="box-icon-strip stomach-strip">
-            <span class="icon">🥪</span>
-            <span class="system-name">Digestive System</span>
-          </div>
-          <div class="box-svg-diagram">
-            <svg viewBox="0 0 240 180" class="mini-diagram-svg" xmlns="http://www.w3.org/2000/svg">
-              <!-- Esophagus -->
-              <line x1="120" y1="15" x2="120" y2="45" stroke="#ea580c" stroke-width="5" stroke-linecap="round" />
-              <!-- Stomach J-shape -->
-              <path d="M120,45 C130,45 150,50 148,70 C145,95 110,95 105,80 C100,70 110,55 120,45 Z" fill="#ffedd5" stroke="#ea580c" stroke-width="2.5" />
-              <!-- Liver -->
-              <path d="M75,50 C90,45 105,50 105,65 C100,80 80,80 75,70 Z" fill="#fee2e2" stroke="#dc2626" stroke-width="2" />
-              <!-- Small & Large Intestine -->
-              <rect x="90" y="95" width="60" height="45" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5" />
-              <path d="M98,110 Q120,105 142,110 M102,122 Q120,130 138,122" stroke="#16a34a" stroke-width="2" fill="none" />
-              <text x="120" y="165" text-anchor="middle" font-size="9" fill="#15803d" font-weight="bold">Stomach ➔ Intestines (24h Journey)</text>
-            </svg>
-          </div>
-          <div class="box-content">
-            <h3>The 30-Foot Food Refinery</h3>
-            <p>
-              Your digestive tract breaks down pizza, apples, and milk into molecular nutrients (proteins, carbohydrates, fats, vitamins) that your cells burn for fuel.
-            </p>
-            <ul class="bullet-list">
-              <li><strong>Stomach:</strong> Uses strong hydrochloric acid (pH 1.5) to digest food.</li>
-              <li><strong>Small Intestine:</strong> 22-foot tube where 90% of nutrients are absorbed.</li>
-              <li><strong>Large Intestine:</strong> Recovers water and compacts waste.</li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- SYSTEM 5: SKELETAL & MUSCULAR -->
-        <article class="system-box">
-          <div class="box-icon-strip skeleton-strip">
-            <span class="icon">🦴</span>
-            <span class="system-name">Skeletal & Muscular</span>
-          </div>
-          <div class="box-svg-diagram">
-            <svg viewBox="0 0 240 180" class="mini-diagram-svg" xmlns="http://www.w3.org/2000/svg">
-              <!-- Skull -->
-              <ellipse cx="120" cy="35" rx="16" ry="14" fill="#f8fafc" stroke="#475569" stroke-width="2" />
-              <!-- Ribcage -->
-              <ellipse cx="120" cy="75" rx="22" ry="20" fill="none" stroke="#475569" stroke-width="2" />
-              <line x1="120" y1="55" x2="120" y2="95" stroke="#475569" stroke-width="3" />
-              <line x1="102" y1="70" x2="138" y2="70" stroke="#475569" stroke-width="1.8" />
-              <line x1="100" y1="80" x2="140" y2="80" stroke="#475569" stroke-width="1.8" />
-              <!-- Arm Muscle Pairing -->
-              <path d="M142,65 Q165,70 175,90" stroke="#ef4444" stroke-width="5" stroke-linecap="round" />
-              <text x="180" y="80" font-size="9" fill="#dc2626" font-weight="bold">Bicep</text>
-              <!-- Femur (Thigh bone) -->
-              <line x1="110" y1="105" x2="105" y2="155" stroke="#475569" stroke-width="5" stroke-linecap="round" />
-              <line x1="130" y1="105" x2="135" y2="155" stroke="#475569" stroke-width="5" stroke-linecap="round" />
-              <text x="120" y="172" text-anchor="middle" font-size="9" fill="#334155" font-weight="bold">206 Bones + 600 Muscles</text>
-            </svg>
-          </div>
-          <div class="box-content">
-            <h3>Living Armor & Motor System</h3>
-            <p>
-              Bones are living tissue made of collagen and calcium. Ounce for ounce, human bone is <strong>stronger than steel and reinforced concrete</strong>!
-            </p>
-            <ul class="bullet-list">
-              <li><strong>Bone Marrow:</strong> Manufactures 2 million fresh red blood cells every second.</li>
-              <li><strong>Pairs of Muscles:</strong> Biceps pull up; triceps pull down (opposing pairs).</li>
-              <li><strong>Joints:</strong> Hinges and ball-and-sockets that let you run and throw.</li>
-            </ul>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- SECTION 3: INTERACTIVE HANDS-ON LABS -->
-    <section class="section labs-section" id="interactive-labs">
-      <div class="section-title-wrap">
-        <span class="section-pill">Hands-on Experiments</span>
-        <h2 class="section-heading">Middle School <span class="highlight">Interactive Labs</span></h2>
-        <p class="section-subtext">Try out real-time simulators to see how exercise affects heart rate and test your nervous reflex speed!</p>
-      </div>
-
-      <div class="labs-container">
-        <!-- LAB 1: CARDIAC MONITOR & ECG -->
-        <div class="lab-card">
-          <div class="lab-badge-title">
-            <span class="lab-num">LAB 01</span>
-            <h3>🫀 Heart Rate & Cardiac Pulse Monitor</h3>
-          </div>
-          <p class="lab-intro">
-            Slide the heart rate to simulate what happens during resting, walking, or sprinting in gym class! Listen to the realistic lub-dub sound.
-          </p>
-
-          <!-- LIVE ECG WAVEFORM CANVAS -->
-          <div class="ecg-monitor-frame">
-            <canvas id="ecg-canvas" width="600" height="130"></canvas>
-            <div class="ecg-overlay-stats">
-              <span class="live-pulse-dot"></span>
-              <span id="ecg-readout-bpm">75 BPM</span>
-              <span class="ecg-tag" id="ecg-readout-tag">Normal Resting</span>
-            </div>
-          </div>
-
-          <div class="slider-box">
-            <div class="slider-row">
-              <label for="bpm-slider">Adjust Heart Rate:</label>
-              <span class="slider-val" id="bpm-display-val">75 Beats / Minute</span>
-            </div>
-            <input type="range" id="bpm-slider" min="45" max="180" value="75" class="clean-slider">
-
-            <div class="preset-pills">
-              <button class="preset-pill" data-bpm="52">😴 Sleeping (52)</button>
-              <button class="preset-pill active" data-bpm="75">🛋️ Resting (75)</button>
-              <button class="preset-pill" data-bpm="120">🚶 Brisk Walk (120)</button>
-              <button class="preset-pill" data-bpm="170">🏃 Gym Sprint (170)</button>
-            </div>
-          </div>
-
-          <div class="lab-science-note">
-            <strong>💡 Science Fact:</strong>
-            <span id="ecg-science-fact">At 75 BPM, your heart pumps about 1.3 gallons of blood per minute. During sprinting at 170 BPM, your cardiac output increases up to 5 times!</span>
-          </div>
-        </div>
-
-        <!-- LAB 2: NERVOUS SYSTEM REFLEX TESTER -->
-        <div class="lab-card">
-          <div class="lab-badge-title">
-            <span class="lab-num">LAB 02</span>
-            <h3>⚡ Nervous System Reaction Time Tester</h3>
-          </div>
-          <p class="lab-intro">
-            Test how quickly your eyes send sensory data to your brain and your motor nerves trigger your finger muscles to click!
-          </p>
-
-          <!-- REFLEX CLICK ZONE -->
-          <div class="reflex-pad" id="reflex-pad">
-            <div class="reflex-status-content">
-              <span class="reflex-icon" id="reflex-icon">🧠</span>
-              <h4 id="reflex-main-text">Click "Start Test" Below</h4>
-              <p id="reflex-sub-text">Wait for this box to turn <span style="color:#16a34a; font-weight:bold;">GREEN</span>, then click as fast as possible!</p>
-            </div>
-          </div>
-
-          <div class="reflex-controls-row">
-            <button class="btn btn-primary" id="reflex-start-btn">Start Reaction Test</button>
-            <div class="best-score-display">
-              <span>Your Best Speed:</span>
-              <strong id="reflex-best-ms">-- ms</strong>
-            </div>
-          </div>
-
-          <div class="lab-science-note">
-            <strong>💡 Average Middle Schooler:</strong>
-            <span>Normal visual reaction time is 220 to 280 milliseconds. Can you beat 200 ms?</span>
-          </div>
-        </div>
-
-        <!-- LAB 3: LUNG EXPANSION BREATHING PACER -->
-        <div class="lab-card">
-          <div class="lab-badge-title">
-            <span class="lab-num">LAB 03</span>
-            <h3>🫁 Lung Breathing Cycle & Pacer</h3>
-          </div>
-          <p class="lab-intro">
-            Breathe along with the animated lung circle (4 seconds in, 4 seconds hold, 4 seconds out). Observe how your diaphragm expands chest volume!
-          </p>
-
-          <div class="breath-arena">
-            <div class="lung-circle" id="lung-circle">
-              <span class="breath-step-name" id="breath-step-name">Inhale (Oxygen)</span>
-              <span class="breath-counter" id="breath-counter">4s</span>
-            </div>
-          </div>
-
-          <div class="lab-controls-center">
-            <button class="btn btn-secondary" id="breath-toggle-btn">▶ Start Breathing Exercise</button>
-          </div>
-
-          <div class="lab-science-note">
-            <strong>💡 Diaphragm Action:</strong>
-            <span>When you breathe in, the diaphragm muscle moves downward, lowering air pressure in your lungs so outside air rushes in!</span>
-          </div>
-        </div>
-
-        <!-- LAB 4: 24-HOUR FOOD JOURNEY -->
-        <div class="lab-card">
-          <div class="lab-badge-title">
-            <span class="lab-num">LAB 04</span>
-            <h3>🥪 The 24-Hour Food Journey Timeline</h3>
-          </div>
-          <p class="lab-intro">
-            Click each stage to see what happens to an apple or sandwich as it travels through your digestive system:
-          </p>
-
-          <div class="timeline-container">
-            <div class="t-step active" data-step="0">
-              <span class="t-num">1</span>
-              <div>
-                <strong>Mouth & Teeth (1 min)</strong>
-                <p>Chewing crushes food; salivary enzymes start breaking down carbohydrates.</p>
-              </div>
-            </div>
-            <div class="t-step" data-step="1">
-              <span class="t-num">2</span>
-              <div>
-                <strong>Esophagus (5 sec)</strong>
-                <p>Muscular waves (peristalsis) squeeze the food bolus down into your stomach.</p>
-              </div>
-            </div>
-            <div class="t-step" data-step="2">
-              <span class="t-num">3</span>
-              <div>
-                <strong>Stomach Acid Bath (2-4 hrs)</strong>
-                <p>Strong hydrochloric acid and pepsin liquefy food into a creamy soup called chyme.</p>
-              </div>
-            </div>
-            <div class="t-step" data-step="3">
-              <span class="t-num">4</span>
-              <div>
-                <strong>Small Intestine (3-5 hrs)</strong>
-                <p>Millions of tiny villi absorb 90% of all vitamins, minerals, proteins, and sugars.</p>
-              </div>
-            </div>
-            <div class="t-step" data-step="4">
-              <span class="t-num">5</span>
-              <div>
-                <strong>Large Intestine (10-20 hrs)</strong>
-                <p>Water is reclaimed, beneficial gut bacteria make vitamins, and waste is prepared.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4: GAMIFIED CHALLENGE QUIZ -->
-    <section class="section quiz-section" id="trivia-quiz">
-      <div class="section-title-wrap">
-        <span class="section-pill">Check Your Knowledge</span>
-        <h2 class="section-heading">Body Systems <span class="highlight">Pop Quiz</span></h2>
-        <p class="section-subtext">Answer all 5 questions to test your biology knowledge and earn your Science Fair Certificate!</p>
-      </div>
-
-      <div class="quiz-wrapper">
-        <div class="quiz-box" id="quiz-main-card">
-          <div class="quiz-header-bar">
-            <span>Question <span id="q-index-disp">1</span> of 5</span>
-            <span class="score-pill">Score: <strong id="q-score-disp">0</strong> / 5</span>
-          </div>
-
-          <div class="quiz-bar-bg">
-            <div class="quiz-bar-fill" id="quiz-progress-bar"></div>
-          </div>
-
-          <div class="quiz-question-row">
-            <span class="q-icon" id="q-icon">🫀</span>
-            <h3 class="q-text" id="q-text">Which organ is responsible for pumping oxygen-rich blood through your arteries?</h3>
-          </div>
-
-          <div class="quiz-choices" id="quiz-choices-container">
-            <!-- Dynamically generated choices -->
-          </div>
-
-          <div class="quiz-feedback-banner hidden" id="quiz-feedback-banner">
-            <p id="quiz-feedback-text"></p>
-            <button class="btn btn-sm btn-primary" id="quiz-next-question-btn">Next Question ➔</button>
-          </div>
-        </div>
-
-        <!-- COMPLETION CERTIFICATE -->
-        <div class="certificate-box hidden" id="quiz-cert-card">
-          <div class="cert-border">
-            <span class="cert-medal">🏆</span>
-            <h3>Certificate of Achievement</h3>
-            <p class="cert-subtitle">Middle School Science Exhibition • Human Biology Master</p>
-            <div class="cert-score-highlight">
-              Final Score: <strong id="cert-final-score">5/5</strong>
-            </div>
-            <p class="cert-congrats" id="cert-congrats-text">Outstanding job! You know the human body systems inside and out!</p>
-            <div class="cert-btn-group">
-              <button class="btn btn-primary" id="retake-quiz-btn">🔄 Retake Quiz</button>
-              <a href="#qr-section" class="btn btn-outline">📱 Share with Classmates</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 5: QR CODE & MOBILE SHOWCASE -->
-    <section class="section qr-section" id="qr-section">
-      <div class="section-title-wrap">
-        <span class="section-pill">Mobile Companion</span>
-        <h2 class="section-heading">Scan to Open <span class="highlight">On Your Phone</span></h2>
-        <p class="section-subtext">No need to type long URLs! Point your phone's camera right at this QR code to view this project live.</p>
-      </div>
-
-      <div class="qr-showcase-box">
-        <div class="qr-info-side">
-          <span class="github-badge">🌐 HOSTED LIVE ON GITHUB PAGES</span>
-          <h3>Bring This Project to the Science Fair Table!</h3>
-          <p>
-            Teachers, judges, and friends can point their phone camera right at your poster board to open this interactive website on their screen. Everything works smoothly on iPhone and Android browsers.
-          </p>
-
-          <div class="url-copy-box">
-            <label for="site-url-input">Direct Project Link:</label>
-            <div class="input-with-button">
-              <input type="text" id="site-url-input" value="https://sanchit196.github.io/body-systems/" readonly class="url-input">
-              <button class="btn btn-sm btn-primary" id="copy-url-btn">📋 Copy Link</button>
-            </div>
-            <span class="copy-alert" id="copy-alert">Link copied to clipboard!</span>
-          </div>
-
-          <div class="qr-action-buttons">
-            <a href="qrcode.png" download="body-systems-qr.png" class="btn btn-primary">
-              <span>💾 Download QR Image</span>
-            </a>
-            <button class="btn btn-outline" onclick="window.print()">
-              <span>🖨️ Print Science Fair Poster</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="qr-image-side">
-          <div class="qr-card-frame">
-            <img src="qrcode.png" alt="Scan QR Code to open Body Systems project" class="qr-large-img">
-            <div class="qr-scan-hint">
-              <strong>📸 SCAN WITH CAMERA</strong>
-              <span>https://sanchit196.github.io/body-systems/</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- POPUP MODAL FOR QUICK QR CODE -->
-  <div class="modal-backdrop hidden" id="qr-modal">
-    <div class="modal-window">
-      <button class="modal-close" id="modal-close-btn">&times;</button>
-      <div class="modal-content">
-        <span class="modal-tag">📱 Mobile Quick Link</span>
-        <h3>Scan with Your Phone</h3>
-        <p>Point any camera at this QR code to launch the site on your phone:</p>
-        <div class="modal-qr-frame">
-          <img src="qrcode.png" alt="QR Code" class="modal-qr-img">
-        </div>
-        <p class="modal-link-text">https://sanchit196.github.io/body-systems/</p>
-        <div class="modal-btns">
-          <button class="btn btn-sm btn-primary" id="modal-copy-btn">📋 Copy Link</button>
-          <button class="btn btn-sm btn-secondary" id="modal-dismiss-btn">Done</button>
-        </div>
+      <div class="modal-link">https://sanchit196.github.io/body-systems/</div>
+      <div class="modal-actions">
+        <button class="btn-minimal" id="modal-copy-btn">📋 Copy Link</button>
+        <button class="btn-minimal" id="modal-done-btn">Done</button>
       </div>
     </div>
   </div>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-left">
-        <div class="footer-logo">
-          <span>🫀</span> BodySystems Project
-        </div>
-        <p>
-          A middle-school biology exhibition project designed to make learning about human body systems visual, engaging, and fun.
-        </p>
-      </div>
-
-      <div class="footer-col">
-        <h4>The 5 Systems</h4>
-        <ul>
-          <li><a href="#systems-gallery">Circulatory System</a></li>
-          <li><a href="#systems-gallery">Respiratory System</a></li>
-          <li><a href="#systems-gallery">Nervous System</a></li>
-          <li><a href="#systems-gallery">Digestive System</a></li>
-          <li><a href="#systems-gallery">Skeletal & Muscular</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Interactive Labs</h4>
-        <ul>
-          <li><a href="#interactive-labs">Heart Rate & ECG</a></li>
-          <li><a href="#interactive-labs">Reflex Speed Test</a></li>
-          <li><a href="#interactive-labs">Breathing Cycle Pacer</a></li>
-          <li><a href="#trivia-quiz">Science Pop Quiz</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Project Info</h4>
-        <p><strong>Grade:</strong> 7th / 8th Grade</p>
-        <p><strong>Exhibition:</strong> Science Showcase 2026</p>
-        <p><strong>Host:</strong> <a href="https://github.com/sanchit196/body-systems" target="_blank" rel="noopener">GitHub Pages</a></p>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>© 2026 Human Body Systems • Middle School Science Fair Project • Built with curiosity 🚀</p>
-    </div>
-  </footer>
 
   <script src="app.js"></script>
 </body>
