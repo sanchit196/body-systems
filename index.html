@@ -3,76 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Body Systems | Grade 7 Science Project</title>
-  <meta name="description" content="Body Systems - Grade 7 Science Project. Minimal 1-screen interactive anatomy sketch with organ drill-down and AI search.">
+  <title>BODY SYSTEMS | Grade 7 Science Project</title>
+  <meta name="description" content="Body Systems - Grade 7 Science Project. Minimalist hand-drawn interactive biology project with AI search and systems explorer.">
   
-  <!-- Clean Inter & Space Grotesk Fonts -->
+  <!-- Authentic Human Handwriting Google Fonts (Kalam, Caveat, Patrick Hand) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
 </head>
 <body class="theme-black">
 
-  <!-- APP CONTAINER (1-SCREEN VIEWPORT) -->
+  <!-- 1-SCREEN VIEWPORT CONTAINER -->
   <div class="app-viewport">
     
-    <!-- MINIMAL TOP BAR -->
-    <header class="top-nav">
-      <div class="nav-left">
-        <span class="pencil-icon">✏️</span>
-        <div class="logo-group">
-          <span class="logo-title">Body Systems</span>
-          <span class="logo-badge">Grade 7 Science Project</span>
-        </div>
-      </div>
+    <!-- TOP SECTION: BOLD HORIZONTAL TITLE + SUBTITLE + ASK ME ANYTHING & QR -->
+    <header class="top-header">
+      <h1 class="main-title">BODY SYSTEMS</h1>
+      <p class="subtitle">Grade 7 Science Project</p>
 
-      <!-- AI ORGAN SEARCH BAR -->
-      <div class="search-container">
-        <div class="search-input-wrap">
-          <span class="search-icon">✨</span>
-          <input type="text" id="ai-search-input" placeholder="Ask or search any body part (e.g. Stomach, Liver, Esophagus, Heart)..." autocomplete="off">
-          <button id="clear-search-btn" class="clear-btn hidden">&times;</button>
+      <!-- ASK ME ANYTHING SEARCH BOX ADJACENT TO QR CODE -->
+      <div class="search-qr-bar">
+        <div class="search-container">
+          <div class="search-input-wrap">
+            <span class="search-icon">✏️</span>
+            <input type="text" id="ai-search-input" placeholder="Ask me anything about any body part (e.g. Stomach, Heart, Liver, Femur)..." autocomplete="off">
+            <button id="clear-search-btn" class="clear-btn hidden">&times;</button>
+          </div>
+          <!-- AUTOCOMPLETE SEARCH DROPDOWN -->
+          <div class="search-dropdown hidden" id="search-dropdown"></div>
         </div>
-        <!-- SEARCH RESULTS DROPDOWN -->
-        <div class="search-dropdown hidden" id="search-dropdown"></div>
-      </div>
 
-      <div class="nav-right">
-        <button id="audio-toggle-btn" class="btn-icon" title="Toggle Sound">🔊</button>
-        <button id="qr-btn" class="btn-minimal"><span>📱 QR Code</span></button>
+        <button id="qr-btn" class="btn-qr-action">
+          <span>📱 Scan QR Code</span>
+        </button>
+
+        <button id="audio-toggle-btn" class="btn-audio" title="Toggle Sound">🔊</button>
       </div>
     </header>
 
     <!-- MAIN DASHBOARD (1 SCREEN, DUAL PANEL) -->
     <main class="main-dashboard">
       
-      <!-- LEFT PANEL: 10-SECOND PENCIL SKETCH ANIMATION (NIDDK ANATOMICAL SKETCH) -->
+      <!-- LEFT PANEL: PURE DRAWING (ALL CLUTTER & TOP/BOTTOM TEXT REMOVED) -->
       <section class="sketch-panel">
-        <div class="panel-header">
-          <div class="sketch-status">
-            <span class="rec-dot"></span>
-            <span id="sketch-timer-label">PENCIL SKETCH • 10s DRAWING</span>
-          </div>
-          <div class="sketch-actions">
-            <button id="invert-view-btn" class="btn-text-action" title="Toggle Paper / Chalkboard">🌓 Paper Mode</button>
-            <button id="restart-sketch-btn" class="btn-text-action" title="Replay 10s Pencil Sketch">🔄 Redraw (10s)</button>
-          </div>
-        </div>
-
-        <div class="sketch-stage paper-mode" id="sketch-stage">
+        <div class="sketch-stage" id="sketch-stage">
           <!-- Animated Moving Pencil Hand -->
           <div class="animated-pencil" id="pencil-tip">
             <span class="pencil-lead">✏️</span>
           </div>
 
-          <!-- THE AUTHENTIC PENCIL DRAWING (NIDDK MEDIA ASSET 17996) -->
+          <!-- THE AUTHENTIC PENCIL DRAWING (CLEAN & UNINTERRUPTED) -->
           <div class="sketch-wrapper" id="sketch-wrapper">
-            <img src="digestive_sketch.jpg" alt="Digestive system within an outline of the top half of a human body - NIDDK Pencil Sketch" class="sketch-img" id="sketch-img">
+            <img src="digestive_sketch.jpg" alt="Digestive System Pencil Sketch" class="sketch-img" id="sketch-img">
             
-            <!-- Dynamic 10-Second Reveal Mask -->
+            <!-- 10-Second Reveal Mask -->
             <div class="drawing-curtain" id="drawing-curtain"></div>
 
             <!-- INTERACTIVE HOTSPOTS MATCHING LABELS -->
@@ -91,30 +78,24 @@
             </div>
           </div>
         </div>
-
-        <div class="sketch-caption">
-          <span>✍️ NIDDK Medical Library Drawing (Media Asset #17996)</span>
-          <span class="caption-hint">Click any label to inspect</span>
-        </div>
       </section>
 
-      <!-- RIGHT PANEL: MINIMAL SYSTEM & ORGAN DRILL-DOWN -->
+      <!-- RIGHT PANEL: DRILL-DOWN EXPLORER WITH ENLARGED HIGHLIGHTED BUTTONS -->
       <section class="explorer-panel">
         
-        <!-- SYSTEM SELECTOR CHIPS -->
+        <!-- SYSTEM SELECTOR CHIPS (ENLARGED & HIGHLIGHTED) -->
         <div class="systems-bar">
-          <button class="sys-chip active" data-sys="digestive">🥪 Digestive</button>
-          <button class="sys-chip" data-sys="circulatory">🫀 Circulatory</button>
-          <button class="sys-chip" data-sys="respiratory">🫁 Respiratory</button>
-          <button class="sys-chip" data-sys="nervous">🧠 Nervous</button>
-          <button class="sys-chip" data-sys="skeletal">🦴 Skeletal</button>
-          <button class="sys-chip" data-sys="excretory">🩸 Excretory</button>
+          <button class="sys-chip active" data-sys="digestive">🥪 Digestive System</button>
+          <button class="sys-chip" data-sys="circulatory">🫀 Circulatory System</button>
+          <button class="sys-chip" data-sys="respiratory">🫁 Respiratory System</button>
+          <button class="sys-chip" data-sys="nervous">🧠 Nervous System</button>
+          <button class="sys-chip" data-sys="skeletal">🦴 Skeletal System</button>
+          <button class="sys-chip" data-sys="excretory">🩸 Excretory System</button>
         </div>
 
-        <!-- DRILL-DOWN STAGE -->
+        <!-- DRILLDOWN DETAILS -->
         <div class="drilldown-stage">
           
-          <!-- SYSTEM HEADER INFO -->
           <div class="system-summary">
             <div class="summary-left">
               <span class="sys-badge" id="sys-badge">SYSTEM 01</span>
@@ -126,7 +107,7 @@
             </div>
           </div>
 
-          <!-- ORGANS LIST (CLICK TO REVEAL SHORT FACT) -->
+          <!-- ORGANS LIST -->
           <div class="organs-list" id="organs-list">
             <!-- Dynamic organ pills generated via JS -->
           </div>
@@ -152,10 +133,10 @@
               </div>
             </div>
 
-            <!-- MINI ACTION ROW -->
+            <!-- ACTION FOOTER -->
             <div class="fact-footer">
-              <span class="sub-parts-label">Key Anatomical Features: <strong id="detail-subparts">Cardia, Fundus, Body, Pyloric Sphincter</strong></span>
-              <button class="btn-mini" id="play-pulse-btn">🔊 Sound</button>
+              <span class="sub-parts-label">Anatomical Parts: <strong id="detail-subparts">Cardia, Fundus, Body, Pyloric Sphincter</strong></span>
+              <button class="btn-mini" id="play-pulse-btn">🔊 Listen</button>
             </div>
           </div>
 
@@ -173,14 +154,14 @@
       <button class="modal-close-btn" id="modal-close-btn">&times;</button>
       <span class="modal-tag">MOBILE COMPANION</span>
       <h3>Scan on Your Phone</h3>
-      <p>Point any mobile camera at this QR code to view this 1-scroll project live:</p>
+      <p>Point any mobile camera at this QR code to view this project live:</p>
       <div class="modal-qr">
         <img src="qrcode.png" alt="Scan QR Code">
       </div>
       <div class="modal-link">https://sanchit196.github.io/body-systems/</div>
       <div class="modal-actions">
-        <button class="btn-minimal" id="modal-copy-btn">📋 Copy Link</button>
-        <button class="btn-minimal" id="modal-done-btn">Done</button>
+        <button class="btn-modal" id="modal-copy-btn">📋 Copy Link</button>
+        <button class="btn-modal" id="modal-done-btn">Done</button>
       </div>
     </div>
   </div>
