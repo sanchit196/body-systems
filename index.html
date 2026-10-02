@@ -47,7 +47,7 @@
     <!-- MAIN DASHBOARD (1 SCREEN, DUAL PANEL) -->
     <main class="main-dashboard">
       
-      <!-- LEFT PANEL: PURE DRAWING (ALL CLUTTER & TOP/BOTTOM TEXT REMOVED) -->
+      <!-- LEFT PANEL: PURE DRAWING WITH ACCURATELY POSITIONED HIGHLIGHTER LABELS -->
       <section class="sketch-panel">
         <div class="sketch-stage" id="sketch-stage">
           <!-- Animated Moving Pencil Hand -->
@@ -55,26 +55,58 @@
             <span class="pencil-lead">✏️</span>
           </div>
 
-          <!-- THE AUTHENTIC PENCIL DRAWING (CLEAN & UNINTERRUPTED) -->
+          <!-- THE AUTHENTIC PENCIL DRAWING (FIXED 413x600 ASPECT RATIO) -->
           <div class="sketch-wrapper" id="sketch-wrapper">
             <img src="digestive_sketch.jpg" alt="Digestive System Pencil Sketch" class="sketch-img" id="sketch-img">
             
             <!-- 10-Second Reveal Mask -->
             <div class="drawing-curtain" id="drawing-curtain"></div>
 
-            <!-- INTERACTIVE HOTSPOTS MATCHING LABELS -->
+            <!-- PRECISE INTERACTIVE HOTSPOT BADGES & ORGAN DOTS -->
             <div class="interactive-overlay">
-              <button class="hotspot-pin" style="top: 17%; left: 70%;" data-part="esophagus" title="Esophagus">Esophagus</button>
-              <button class="hotspot-pin" style="top: 34%; left: 68%;" data-part="stomach" title="Stomach">Stomach</button>
-              <button class="hotspot-pin" style="top: 35%; left: 45%;" data-part="liver" title="Liver">Liver</button>
-              <button class="hotspot-pin" style="top: 37%; left: 22%;" data-part="gallbladder" title="Gallbladder">Gallbladder</button>
-              <button class="hotspot-pin" style="top: 38%; left: 81%;" data-part="pancreas" title="Pancreas">Pancreas</button>
-              <button class="hotspot-pin" style="top: 45%; left: 24%;" data-part="duodenum" title="Duodenum">Duodenum</button>
-              <button class="hotspot-pin" style="top: 67%; left: 22%;" data-part="small-intestine" title="Small intestine">Small intestine</button>
-              <button class="hotspot-pin" style="top: 59%; left: 80%;" data-part="large-intestine" title="Large intestine">Large intestine</button>
-              <button class="hotspot-pin" style="top: 73%; left: 25%;" data-part="appendix" title="Appendix">Appendix</button>
-              <button class="hotspot-pin" style="top: 76%; left: 72%;" data-part="rectum" title="Rectum">Rectum</button>
-              <button class="hotspot-pin" style="top: 78%; left: 41%;" data-part="anus" title="Anus">Anus</button>
+              <!-- 1. ESOPHAGUS -->
+              <button class="hotspot-badge" style="top: 27.0%; left: 76.8%;" data-part="esophagus" title="Esophagus">Esophagus</button>
+              <button class="organ-dot" style="top: 23.0%; left: 52.0%;" data-part="esophagus" title="Esophagus Tube"></button>
+
+              <!-- 2. STOMACH -->
+              <button class="hotspot-badge" style="top: 41.7%; left: 67.8%;" data-part="stomach" title="Stomach">Stomach</button>
+              <button class="organ-dot" style="top: 36.0%; left: 59.0%;" data-part="stomach" title="Stomach Pouch"></button>
+
+              <!-- 3. LIVER -->
+              <button class="hotspot-badge" style="top: 52.0%; left: 43.3%;" data-part="liver" title="Liver">Liver</button>
+              <button class="organ-dot" style="top: 35.0%; left: 44.0%;" data-part="liver" title="Liver Organ"></button>
+
+              <!-- 4. GALLBLADDER -->
+              <button class="hotspot-badge" style="top: 44.7%; left: 19.9%;" data-part="gallbladder" title="Gallbladder">Gallbladder</button>
+              <button class="organ-dot" style="top: 38.0%; left: 43.0%;" data-part="gallbladder" title="Gallbladder Sac"></button>
+
+              <!-- 5. PANCREAS -->
+              <button class="hotspot-badge" style="top: 52.7%; left: 82.1%;" data-part="pancreas" title="Pancreas">Pancreas</button>
+              <button class="organ-dot" style="top: 41.0%; left: 58.0%;" data-part="pancreas" title="Pancreas Gland"></button>
+
+              <!-- 6. DUODENUM -->
+              <button class="hotspot-badge" style="top: 62.8%; left: 20.1%;" data-part="duodenum" title="Duodenum">Duodenum</button>
+              <button class="organ-dot" style="top: 41.0%; left: 48.0%;" data-part="duodenum" title="Duodenum Loop"></button>
+
+              <!-- 7. SMALL INTESTINE -->
+              <button class="hotspot-badge" style="top: 82.3%; left: 19.1%;" data-part="small-intestine" title="Small intestine">Small intestine</button>
+              <button class="organ-dot" style="top: 54.0%; left: 50.0%;" data-part="small-intestine" title="Small Intestine Loops"></button>
+
+              <!-- 8. LARGE INTESTINE -->
+              <button class="hotspot-badge" style="top: 81.7%; left: 80.6%;" data-part="large-intestine" title="Large intestine">Large intestine</button>
+              <button class="organ-dot" style="top: 53.0%; left: 66.0%;" data-part="large-intestine" title="Large Intestine Colon"></button>
+
+              <!-- 9. APPENDIX -->
+              <button class="hotspot-badge" style="top: 90.8%; left: 21.5%;" data-part="appendix" title="Appendix">Appendix</button>
+              <button class="organ-dot" style="top: 58.0%; left: 43.0%;" data-part="appendix" title="Appendix Tip"></button>
+
+              <!-- 10. RECTUM -->
+              <button class="hotspot-badge" style="top: 93.0%; left: 72.2%;" data-part="rectum" title="Rectum">Rectum</button>
+              <button class="organ-dot" style="top: 60.0%; left: 53.0%;" data-part="rectum" title="Rectum Canal"></button>
+
+              <!-- 11. ANUS -->
+              <button class="hotspot-badge" style="top: 95.3%; left: 38.5%;" data-part="anus" title="Anus">Anus</button>
+              <button class="organ-dot" style="top: 64.0%; left: 52.0%;" data-part="anus" title="Anus Opening"></button>
             </div>
           </div>
         </div>

@@ -116,13 +116,24 @@ const SYSTEMS_DATA = {
       },
       {
         id: "rectum",
-        name: "Rectum & Anus",
-        role: "Waste Exit Gateway",
+        name: "Rectum",
+        role: "Temporary Waste Reservoir",
         emoji: "🚪",
-        func: "The final 6-8 inches where stool is temporarily held before voluntary sphincter muscles release it.",
-        fact: "Equipped with specialized nerve sensors that signal to your brain when it's time to find a bathroom!",
-        subparts: "Rectal Ampulla, Internal & External Sphincters, Anal Canal",
+        func: "The final 5-6 inches of the large intestine where solid stool is temporarily held before elimination.",
+        fact: "Equipped with sensitive nerve stretch receptors that signal to your brain when it's time to use the restroom!",
+        subparts: "Rectal Ampulla, Rectal Columns, Internal Sphincter",
         pinId: "rectum",
+        sound: "beep"
+      },
+      {
+        id: "anus",
+        name: "Anus",
+        role: "Voluntary Muscular Exit",
+        emoji: "⭕",
+        func: "The terminal opening of the digestive tract controlled by dual internal and external sphincter rings.",
+        fact: "The external sphincter is under conscious voluntary control, allowing you to hold waste until ready!",
+        subparts: "Anal Canal, Involuntary Internal Sphincter, Voluntary External Sphincter",
+        pinId: "anus",
         sound: "beep"
       }
     ]
@@ -420,11 +431,11 @@ function selectOrgan(organ) {
   document.getElementById("detail-fact").textContent = organ.fact;
   document.getElementById("detail-subparts").textContent = organ.subparts;
 
-  // Highlight Hotspot Pin on the sketch
-  document.querySelectorAll(".hotspot-pin").forEach(pin => {
-    const pinPart = pin.getAttribute("data-part");
+  // Highlight Hotspot Badges and Organ Dots on the sketch
+  document.querySelectorAll(".hotspot-badge, .organ-dot").forEach(el => {
+    const pinPart = el.getAttribute("data-part");
     const isMatch = pinPart === organ.id || (organ.pinId && pinPart === organ.pinId);
-    pin.classList.toggle("active", isMatch);
+    el.classList.toggle("active", isMatch);
   });
 
   // Play audio cue
@@ -548,11 +559,10 @@ function initPencilSketch() {
     });
   }
 
-  // Hotspot Pin Clicks on the Sketch Image
-  document.querySelectorAll(".hotspot-pin").forEach(pin => {
-    pin.addEventListener("click", () => {
-      const partId = pin.getAttribute("data-part");
-      // Find organ in digestive system or any other system
+  // Hotspot Badges & Organ Dots Clicks & Paired-Hover
+  document.querySelectorAll(".hotspot-badge, .organ-dot").forEach(el => {
+    el.addEventListener("click", () => {
+      const partId = el.getAttribute("data-part");
       for (const sKey of Object.keys(SYSTEMS_DATA)) {
         const found = SYSTEMS_DATA[sKey].organs.find(o => o.id === partId || o.pinId === partId);
         if (found) {
@@ -560,6 +570,21 @@ function initPencilSketch() {
           break;
         }
       }
+    });
+
+    // Dual-hover pairing: hovering either the text badge or organ dot highlights both
+    el.addEventListener("mouseenter", () => {
+      const partId = el.getAttribute("data-part");
+      document.querySelectorAll(`.hotspot-badge[data-part="${partId}"], .organ-dot[data-part="${partId}"]`).forEach(sibling => {
+        sibling.classList.add("hover-paired");
+      });
+    });
+
+    el.addEventListener("mouseleave", () => {
+      const partId = el.getAttribute("data-part");
+      document.querySelectorAll(`.hotspot-badge[data-part="${partId}"], .organ-dot[data-part="${partId}"]`).forEach(sibling => {
+        sibling.classList.remove("hover-paired");
+      });
     });
   });
 }

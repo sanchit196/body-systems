@@ -18,6 +18,7 @@
   --accent-white: #ffffff;
   --accent-blue: #38bdf8;
   --accent-highlight: #facc15;
+  --accent-red: #ef4444;
 
   /* Human Handwriting / Notebook Google Fonts */
   --font-hand: 'Kalam', 'Patrick Hand', cursive, sans-serif;
@@ -56,7 +57,7 @@ html, body {
   flex-direction: column;
   height: 100vh;
   max-height: 100vh;
-  padding: 0.75rem 1.25rem;
+  padding: 0.65rem 1.25rem;
   gap: 0.65rem;
 }
 
@@ -69,14 +70,14 @@ html, body {
   align-items: center;
   text-align: center;
   flex-shrink: 0;
-  gap: 0.25rem;
+  gap: 0.2rem;
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 0.65rem;
+  padding-bottom: 0.55rem;
 }
 
 .main-title {
   font-family: var(--font-title);
-  font-size: 2.75rem;
+  font-size: 2.65rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: #ffffff;
@@ -91,7 +92,7 @@ html, body {
   color: var(--accent-highlight);
   font-weight: 700;
   letter-spacing: 0.05em;
-  margin-top: -0.2rem;
+  margin-top: -0.25rem;
 }
 
 /* Ask Me Anything + QR Bar Row */
@@ -102,7 +103,7 @@ html, body {
   gap: 0.85rem;
   width: 100%;
   max-width: 860px;
-  margin-top: 0.4rem;
+  margin-top: 0.35rem;
 }
 
 .search-container {
@@ -253,13 +254,13 @@ html, body {
 }
 
 /* ==========================================================================
-   LEFT PANEL: PURE DRAWING (NO CLUTTER TEXT)
+   LEFT PANEL: PURE DRAWING WITH ACCURATE HIGHLIGHTERS
    ========================================================================== */
 .sketch-panel {
-  background: #ffffff; /* Clean sketchbook paper pad background */
+  background: #ffffff;
   border: 2px solid #52525b;
   border-radius: var(--radius-md);
-  padding: 0.5rem;
+  padding: 0.4rem;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -278,20 +279,20 @@ html, body {
   overflow: hidden;
 }
 
+/* Fixed Aspect Ratio matching 413w x 600h image */
 .sketch-wrapper {
   position: relative;
   height: 100%;
-  max-width: 100%;
+  aspect-ratio: 413 / 600;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .sketch-img {
+  width: 100%;
   height: 100%;
-  max-height: 100%;
-  width: auto;
-  object-fit: contain;
+  object-fit: fill;
   display: block;
 }
 
@@ -321,7 +322,7 @@ html, body {
   z-index: 10;
 }
 
-/* Interactive Hotspot Buttons */
+/* Interactive Hotspot Overlay */
 .interactive-overlay {
   position: absolute;
   inset: 0;
@@ -329,28 +330,78 @@ html, body {
   pointer-events: auto;
 }
 
-.hotspot-pin {
+/* PRECISE BLUE LABELS (Directly placed over printed text in the sketch) */
+.hotspot-badge {
   position: absolute;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid #0284c7;
-  color: #0284c7;
+  background: rgba(240, 249, 255, 0.95);
+  border: 1.5px solid #0284c7;
+  color: #0369a1;
   font-family: var(--font-hand);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  padding: 0.15rem 0.45rem;
-  border-radius: 6px;
+  padding: 0.12rem 0.5rem;
+  border-radius: 9999px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  transition: var(--transition);
+  box-shadow: 0 1px 5px rgba(2, 132, 199, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  user-select: none;
+  z-index: 5;
 }
 
-.hotspot-pin:hover, .hotspot-pin.active {
+.hotspot-badge:hover,
+.hotspot-badge.active,
+.hotspot-badge.hover-paired {
   background: #0284c7;
+  border-color: #0369a1;
   color: #ffffff;
-  transform: translate(-50%, -50%) scale(1.15);
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.8);
+  transform: translate(-50%, -50%) scale(1.12);
+  z-index: 10;
+}
+
+/* PRECISE ORGAN TARGET DOTS (Directly on the anatomical organs) */
+.organ-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #0284c7;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 6px rgba(2, 132, 199, 0.85);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  z-index: 6;
+}
+
+.organ-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid #38bdf8;
+  opacity: 0.75;
+  animation: pulseTargetDot 2s infinite ease-out;
+}
+
+@keyframes pulseTargetDot {
+  0% { transform: scale(0.8); opacity: 0.95; }
+  100% { transform: scale(2.0); opacity: 0; }
+}
+
+.organ-dot:hover,
+.organ-dot.active,
+.organ-dot.hover-paired {
+  width: 14px;
+  height: 14px;
+  background: #ef4444;
+  border-color: #ffffff;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.95);
+  transform: translate(-50%, -50%) scale(1.3);
+  z-index: 11;
 }
 
 /* ==========================================================================
@@ -486,7 +537,7 @@ html, body {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Fact Card (Human-written student notebook look) */
+/* Fact Card */
 .fact-card {
   background: #000000;
   border: 1.5px solid var(--border-subtle);
@@ -725,7 +776,7 @@ html, body {
     grid-template-columns: 1fr;
   }
   .sketch-stage {
-    height: 440px;
+    height: 480px;
   }
   .systems-bar {
     grid-template-columns: repeat(2, 1fr);
